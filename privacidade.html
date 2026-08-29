@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-sem-servidor="1" data-ga4="" data-meta-pixel="">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de Privacidade · Urbana Mobilidade Elétrica</title>
+<meta name="description" content="Como a Urbana Mobilidade Elétrica coleta, usa e protege os dados de quem visita o site. Cookies, medição de anúncios e seus direitos pela LGPD.">
+<meta name="theme-color" content="#1A0037">
+<link rel="canonical" href="https://urbanamobilidade.com.br/privacidade.html">
+
+<link rel="icon" href="assets/img/brand/urbana-vertical.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Saira:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/css/urbana.css">
+
+<script src="assets/js/consent.js"></script>
+
+<style>
+  /* Estilos só desta página. O urbana.css é feito para a landing, que não tem
+     texto corrido longo. */
+  .legal { padding: calc(var(--urb-header) + var(--urb-48)) 0 var(--urb-64); }
+  .legal__cabeca { max-width: 62ch; margin-bottom: var(--urb-48); }
+  /* O t-display é dimensionado para o hero. Numa página de leitura ele domina
+     a tela inteira e empurra o texto para fora do primeiro quadro. */
+  .legal__cabeca h1 { font-size: clamp(32px, 4.4vw, 46px); }
+  .legal__data { color: var(--urb-texto-2); font-size: 14px; margin-top: var(--urb-12); }
+  .legal__corpo { max-width: 72ch; color: var(--urb-corpo); font-size: 16px; line-height: 1.75; }
+
+  .legal__corpo h2 {
+    font-family: var(--urb-display); font-weight: 700; font-size: 22px;
+    color: var(--urb-violeta); margin: var(--urb-48) 0 var(--urb-12);
+  }
+  .legal__corpo h3 {
+    font-family: var(--urb-display); font-weight: 600; font-size: 17px;
+    color: var(--urb-violeta); margin: var(--urb-24) 0 var(--urb-8);
+  }
+  .legal__corpo p, .legal__corpo ul { margin: 0 0 var(--urb-16); }
+  .legal__corpo ul { padding-left: 1.25em; }
+  .legal__corpo li { margin-bottom: var(--urb-8); }
+  .legal__corpo a { color: var(--urb-roxo); text-decoration: underline; text-underline-offset: 3px; }
+  .legal__corpo a:hover { color: var(--urb-roxo-eletrico); }
+  .legal__corpo strong { color: var(--urb-violeta); font-weight: 600; }
+  .legal__corpo code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px;
+    background: var(--urb-roxo-100); padding: 2px 6px; border-radius: var(--urb-r-tag);
+    color: var(--urb-roxo-700);
+  }
+
+  .legal__quadro {
+    margin: var(--urb-24) 0; padding: var(--urb-24);
+    border: 1px solid var(--urb-borda); border-radius: var(--urb-r-card);
+    background: var(--urb-nevoa);
+  }
+  .legal__quadro p:last-child { margin-bottom: 0; }
+
+  .legal__rolagem { overflow-x: auto; }
+  .legal__tabela {
+    width: 100%; border-collapse: collapse; min-width: 560px;
+    margin: var(--urb-16) 0 var(--urb-24); font-size: 15px;
+  }
+  .legal__tabela th, .legal__tabela td {
+    text-align: left; padding: var(--urb-12);
+    border-bottom: 1px solid var(--urb-borda); vertical-align: top;
+  }
+  .legal__tabela th { font-family: var(--urb-display); font-weight: 600; color: var(--urb-violeta); }
+
+  .legal__voltar { display: inline-flex; align-items: center; gap: var(--urb-8); margin-bottom: var(--urb-24); }
+  .legal .rodape { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<a class="u-skip" href="#conteudo">Pular para o conteúdo</a>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <symbol id="i-whats" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12.04 2c-5.5 0-9.97 4.47-9.97 9.97 0 1.76.46 3.48 1.34 5L2 22l5.16-1.35a9.93 9.93 0 0 0 4.88 1.25h.01c5.5 0 9.97-4.47 9.97-9.97 0-2.66-1.04-5.17-2.92-7.05A9.9 9.9 0 0 0 12.04 2Zm0 18.15h-.01a8.27 8.27 0 0 1-4.21-1.15l-.3-.18-3.13.82.84-3.05-.2-.31a8.24 8.24 0 0 1-1.26-4.41c0-4.57 3.72-8.29 8.29-8.29 2.21 0 4.29.86 5.86 2.43a8.24 8.24 0 0 1 2.43 5.87c0 4.57-3.72 8.27-8.31 8.27Zm4.55-6.2c-.25-.13-1.47-.73-1.7-.81-.23-.08-.4-.13-.56.13-.17.25-.64.81-.79.98-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.41.09-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.66.31-.23.25-.87.85-.87 2.08s.89 2.41 1.02 2.58c.12.17 1.75 2.67 4.24 3.75.59.25 1.05.4 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.68-1.18.2-.58.2-1.07.15-1.18-.06-.1-.23-.17-.48-.29Z"/>
+  </symbol>
+</svg>
+
+<header class="header is-fixo" id="header">
+  <div class="u-container header__barra">
+    <a class="header__logo" href="index.html" aria-label="Urbana Mobilidade Elétrica, ir para o início">
+      <img src="assets/img/brand/urbana-horizontal.svg" alt="Urbana Mobilidade Elétrica" width="486" height="127">
+    </a>
+    <div class="header__acoes">
+      <a class="btn btn--primario btn--desktop" data-whats="geral" href="#">
+        <svg aria-hidden="true"><use href="#i-whats"></use></svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo" class="legal">
+  <div class="u-container">
+    <a class="legal__voltar" href="index.html">Voltar para o site</a>
+
+    <div class="legal__cabeca">
+      <h1 class="t-display">Política de Privacidade</h1>
+      <p class="legal__data">Última atualização: 28 de agosto de 2026</p>
+    </div>
+
+    <div class="legal__corpo">
+      <p>
+        Esta página explica quais dados a <span data-config="marca.nome"></span> coleta
+        quando você visita este site, para que servem e o que você pode fazer a respeito.
+        Ela segue a Lei Geral de Proteção de Dados (Lei 13.709/2018).
+      </p>
+
+      <h2>Quem é o controlador dos dados</h2>
+      <div class="legal__quadro">
+        <p><strong data-config="marca.razaoSocial"></strong></p>
+        <p>
+          CNPJ <span data-config="marca.cnpj"></span><br>
+          <span data-config="endereco.logradouro"></span>,
+          <span data-config="endereco.bairro"></span>, Piracicaba/SP,
+          CEP <span data-config="endereco.cep"></span>
+        </p>
+        <p>
+          Canal de contato para assuntos de dados pessoais:
+          <a data-whats="geral" href="#">WhatsApp <span data-config-text="whatsapp.numero"></span></a>
+        </p>
+      </div>
+
+      <h2>O que coletamos</h2>
+
+      <h3>1. Dados que você nos entrega</h3>
+      <p>
+        Quando você preenche o formulário de test ride, informa <strong>nome, telefone e o
+        modelo de interesse</strong>. Esses dados abrem uma conversa no WhatsApp com nossa
+        equipe de vendas e são enviados por e-mail para a nossa equipe interna, para que
+        alguém responda você mesmo que a conversa não chegue a ser iniciada. É a única
+        situação em que o site pede dados que identificam você diretamente, e sempre por
+        sua iniciativa.
+      </p>
+      <p>
+        Para medir a eficácia dos anúncios, nome e telefone podem ser enviados à Meta em
+        forma <strong>criptografada e irreversível</strong> (hash SHA-256), nunca em texto
+        legível. Isso não acontece se você tiver optado por só o essencial.
+      </p>
+
+      <h3>2. Dados de navegação</h3>
+      <p>Enquanto você usa o site, registramos automaticamente:</p>
+      <ul>
+        <li>Páginas e seções vistas, e quanto da página você rolou</li>
+        <li>Tempo com a aba realmente visível</li>
+        <li>Modelos abertos no catálogo e categorias filtradas</li>
+        <li>Cliques nos botões de WhatsApp, incluindo de qual ponto da página partiram</li>
+        <li>Data e hora de cada uma dessas ações</li>
+        <li>Tipo de dispositivo, tamanho de tela, idioma, fuso horário e tipo de conexão</li>
+        <li>Endereço da página, site de origem e parâmetros de campanha na URL</li>
+        <li>Endereço de IP, guardado sempre de forma anonimizada</li>
+      </ul>
+      <p>
+        Nada disso identifica você pelo nome. O que existe é um identificador aleatório,
+        gerado pelo nosso servidor, que serve para saber que uma sequência de ações veio da
+        mesma visita.
+      </p>
+
+      <h2>Cookies e armazenamento local</h2>
+      <div class="legal__rolagem">
+        <table class="legal__tabela">
+          <thead>
+            <tr><th>Nome</th><th>Quem cria</th><th>Para que serve</th><th>Duração</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>_urb</code></td>
+              <td>Urbana</td>
+              <td>Identificador aleatório de visitante. Não guarda nome, telefone nem e-mail.</td>
+              <td>12 meses</td>
+            </tr>
+            <tr>
+              <td><code>urbana:consentimento</code></td>
+              <td>Urbana</td>
+              <td>Guarda a sua escolha sobre cookies, para não perguntar de novo a cada visita.</td>
+              <td>Até você limpar o navegador</td>
+            </tr>
+            <tr>
+              <td><code>urbana:sessao</code></td>
+              <td>Urbana</td>
+              <td>Agrupa as ações de uma mesma visita. Expira sozinho.</td>
+              <td>30 minutos sem uso</td>
+            </tr>
+            <tr>
+              <td><code>_ga</code>, <code>_ga_*</code></td>
+              <td>Google Analytics</td>
+              <td>Medição de audiência. Deixam de ser criados se você optar por só o essencial.</td>
+              <td>Até 24 meses</td>
+            </tr>
+            <tr>
+              <td><code>_fbp</code>, <code>_fbc</code></td>
+              <td>Meta</td>
+              <td>Medição de anúncios do Facebook e do Instagram. Deixam de ser criados se você optar por só o essencial.</td>
+              <td>Até 90 dias</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        A medição começa ativa quando você entra no site, e o aviso de cookies informa isso
+        já na primeira visita. <strong>Você pode desligar a qualquer momento</strong> em
+        "Só o essencial", no próprio aviso ou pelo botão no fim desta página. Ao desligar,
+        os cookies de publicidade param de ser criados e a sua escolha vale para as
+        próximas visitas.
+      </p>
+
+      <h2>Com quem compartilhamos</h2>
+      <ul>
+        <li>
+          <strong>Google</strong> (Analytics e Ads), para entender a audiência do site e
+          medir campanhas.
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Política do Google</a>.
+        </li>
+        <li>
+          <strong>Meta</strong> (Facebook e Instagram), para medir campanhas.
+          <a href="https://www.facebook.com/privacy/policy" target="_blank" rel="noopener">Política da Meta</a>.
+        </li>
+        <li>
+          <strong>WhatsApp</strong>, quando você escolhe iniciar uma conversa conosco.
+        </li>
+      </ul>
+      <p>
+        Não vendemos dados pessoais e não os usamos para finalidade diferente das descritas
+        aqui. Esses serviços podem processar dados fora do Brasil, conforme as políticas de
+        cada um.
+      </p>
+
+      <h2>Por quanto tempo guardamos</h2>
+      <ul>
+        <li><strong>Registros de navegação no nosso servidor:</strong> até 12 meses.</li>
+        <li><strong>Conversas de WhatsApp e dados de contato:</strong> enquanto durar o
+          relacionamento comercial, e depois pelo prazo que a lei exigir.</li>
+        <li><strong>Dados nas plataformas do Google e da Meta:</strong> pelo prazo definido
+          por cada uma delas.</li>
+      </ul>
+
+      <h2>Seus direitos</h2>
+      <p>Pelo artigo 18 da LGPD, você pode a qualquer momento pedir para:</p>
+      <ul>
+        <li>Confirmar se tratamos dados seus e acessar esses dados</li>
+        <li>Corrigir dados incompletos ou desatualizados</li>
+        <li>Pedir anonimização, bloqueio ou eliminação de dados desnecessários</li>
+        <li>Pedir a portabilidade dos seus dados</li>
+        <li>Revogar o consentimento que você deu</li>
+        <li>Saber com quais entidades compartilhamos seus dados</li>
+      </ul>
+      <p>
+        Para exercer qualquer um deles, fale com a gente pelo
+        <a data-whats="geral" href="#">WhatsApp <span data-config-text="whatsapp.numero"></span></a>
+        ou vá até a loja no endereço acima. Respondemos em até 15 dias.
+      </p>
+
+      <h2>Como mudar sua escolha sobre cookies</h2>
+      <div class="legal__quadro">
+        <p>
+          Você pode rever a decisão quando quiser, sem precisar justificar, e a escolha
+          passa a valer na hora.
+        </p>
+        <p>
+          <button class="btn btn--contorno" type="button" id="rever-cookies">Abrir preferências de cookies</button>
+        </p>
+        <p style="font-size:14px;color:var(--urb-texto-2)">
+          Também dá para apagar ou bloquear cookies pelas configurações do seu navegador. Se
+          fizer isso, o site continua funcionando normalmente.
+        </p>
+      </div>
+
+      <h2>Segurança</h2>
+      <p>
+        O site roda inteiro sob HTTPS. Não temos área de login, não guardamos senhas e não
+        pedimos dados de pagamento. Os registros de navegação ficam em servidor com acesso
+        restrito, e as chaves de integração com Google e Meta ficam fora do diretório público
+        do site.
+      </p>
+
+      <h2>Menores de idade</h2>
+      <p>
+        Este site não é direcionado a menores de 18 anos e não coletamos dados de crianças e
+        adolescentes de forma consciente. Se identificarmos um cadastro nessa situação, o
+        dado é eliminado.
+      </p>
+
+      <h2>Mudanças nesta política</h2>
+      <p>
+        Se algo mudar na forma como tratamos dados, atualizamos esta página e a data no topo.
+        Mudanças que ampliem a coleta pedem a sua escolha de cookies novamente.
+      </p>
+    </div>
+  </div>
+</main>
+
+<footer class="rodape s-escura">
+  <div class="u-container">
+    <div class="rodape__base">
+      <span>
+        <span data-config="marca.razaoSocial"></span> · CNPJ <span data-config="marca.cnpj"></span>
+      </span>
+      <span>
+        <a href="index.html">Início</a> ·
+        <a data-config-href="redes.instagram" href="#" target="_blank" rel="noopener">Instagram</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<div class="consentimento" id="consentimento" role="dialog" aria-live="polite"
+     aria-label="Preferências de cookies" hidden>
+  <div class="consentimento__texto">
+    <p class="consentimento__titulo">A gente usa cookies para medir o que funciona.</p>
+    <p>
+      Usamos cookies próprios e de parceiros (Google e Meta) para entender como a
+      página é usada e medir nossos anúncios. Você escolhe.
+      <a href="privacidade.html">Como tratamos seus dados</a>.
+    </p>
+  </div>
+  <div class="consentimento__acoes">
+    <button class="btn btn--contorno" type="button" data-consentimento="recusar">Só o essencial</button>
+    <button class="btn btn--whats" type="button" data-consentimento="aceitar">Aceitar todos</button>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script>
+  /* O app.js não entra aqui: ele monta vitrine, modal, mapa e simulador, que
+     esta página não tem, e quebraria procurando esses elementos. O que ela
+     precisa são só os dados da loja no HTML, que cabem nestas linhas. */
+  (function () {
+    var cfg = window.URBANA_CONFIG;
+    var pegar = function (caminho) {
+      return caminho.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, cfg);
+    };
+    document.querySelectorAll('[data-config]').forEach(function (el) {
+      el.textContent = pegar(el.dataset.config) || '';
+    });
+    document.querySelectorAll('[data-config-text]').forEach(function (el) {
+      el.textContent = pegar(el.dataset.configText) || '';
+    });
+    document.querySelectorAll('[data-config-href]').forEach(function (el) {
+      el.href = pegar(el.dataset.configHref) || '#';
+    });
+    document.querySelectorAll('[data-whats]').forEach(function (el) {
+      el.href = 'https://wa.me/' + cfg.whatsapp.e164 + '?text=' + encodeURIComponent(cfg.mensagens.geral);
+      el.target = '_blank';
+      el.rel = 'noopener';
+    });
+    document.getElementById('rever-cookies').addEventListener('click', function () {
+      if (window.URBANA_CONSENTIMENTO) window.URBANA_CONSENTIMENTO.reabrir();
+    });
+  })();
+</script>
+</body>
+</html>
