@@ -1001,56 +1001,26 @@
   /* ── 13. Mídia pesada só quando faz sentido ───────────────────────────── */
 
   function midia() {
-    /* Três motivos para não sair tocando sozinho: o sistema pediu menos
-       movimento, o navegador está em economia de dados, ou a conexão é 2G. */
-    const pouparMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches
-      || navigator.connection?.saveData === true
-      || /2g/.test(navigator.connection?.effectiveType || '');
+    /* O hero toca sempre: automatico, mudo e em loop, por decisao do cliente.
+       O vídeo nao tem faixa de audio nenhuma, entao nao ha o que silenciar
+       alem do atributo `muted`, que e o que libera o autoplay nos navegadores.
 
-    const anexar = (video, src, tocar = true) => {
+       NOTA DE ACESSIBILIDADE, registrada de proposito: conteudo que comeca
+       sozinho e passa de 5 segundos deveria ter um jeito de pausar (WCAG
+       2.2.2), e este roda 9,4s em loop. O controle foi retirado a pedido, com
+       a consequencia conhecida. Para devolve-lo, ver o historico do git. */
+
+    const anexar = (video, src) => {
       if (!src || video.src) return;
       video.src = src;
       video.addEventListener('canplay', () => video.classList.add('is-pronto'), { once: true });
-      if (tocar) {
-        video.play().catch(() => { /* autoplay bloqueado: o pôster fica */ });
-      }
+      video.play().catch(() => { /* autoplay bloqueado: o poster fica */ });
     };
 
     const hero = $('#hero-video');
-    const controle = $('#hero-controle');
-
     if (hero) {
       const mobile = matchMedia('(max-width: 760px)').matches;
-      const fonte = mobile ? hero.dataset.srcMobile : hero.dataset.src;
-
-      /* Em modo de poupar, o vídeo NÃO carrega e NÃO toca: fica no pôster e o
-         botão vira "play". Antes disso a função inteira desistia aqui, e quem
-         tem "efeitos de animação" desligado no Windows via um hero parado sem
-         nenhuma pista de que havia vídeo e de que dava para assistir. */
-      if (!pouparMovimento) anexar(hero, fonte);
-
-      if (controle) {
-        controle.hidden = false;
-
-        const pintar = () => {
-          const tocando = !hero.paused && hero.src;
-          controle.querySelector('use').setAttribute('href', tocando ? '#i-pausa' : '#i-play');
-          controle.querySelector('.u-visually-hidden').textContent =
-            tocando ? 'Pausar o vídeo de fundo' : 'Reproduzir o vídeo de fundo';
-        };
-
-        controle.addEventListener('click', () => {
-          if (!hero.src) {
-            // Primeira vez em modo de poupar: só agora vale baixar o arquivo.
-            anexar(hero, fonte);
-            return;
-          }
-          if (hero.paused) hero.play().catch(() => {}); else hero.pause();
-        });
-
-        ['play', 'pause', 'loadeddata'].forEach((e) => hero.addEventListener(e, pintar));
-        pintar();
-      }
+      anexar(hero, mobile ? hero.dataset.srcMobile : hero.dataset.src);
     }
 
     // Vídeos de apoio só carregam quando entram na tela.
