@@ -1001,22 +1001,56 @@
   /* ── 13. Mídia pesada só quando faz sentido ───────────────────────────── */
 
   function midia() {
-    const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const economia = navigator.connection?.saveData === true;
-    const lento = /2g/.test(navigator.connection?.effectiveType || '');
-    if (reduzido || economia || lento) return; // o pôster já conta a história
+    /* Três motivos para não sair tocando sozinho: o sistema pediu menos
+       movimento, o navegador está em economia de dados, ou a conexão é 2G. */
+    const pouparMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches
+      || navigator.connection?.saveData === true
+      || /2g/.test(navigator.connection?.effectiveType || '');
 
-    const anexar = (video, src) => {
-      if (!src) return;
+    const anexar = (video, src, tocar = true) => {
+      if (!src || video.src) return;
       video.src = src;
       video.addEventListener('canplay', () => video.classList.add('is-pronto'), { once: true });
-      video.play().catch(() => { /* autoplay bloqueado: o pôster fica, e está tudo bem */ });
+      if (tocar) {
+        video.play().catch(() => { /* autoplay bloqueado: o pôster fica */ });
+      }
     };
 
     const hero = $('#hero-video');
+    const controle = $('#hero-controle');
+
     if (hero) {
       const mobile = matchMedia('(max-width: 760px)').matches;
-      anexar(hero, mobile ? hero.dataset.srcMobile : hero.dataset.src);
+      const fonte = mobile ? hero.dataset.srcMobile : hero.dataset.src;
+
+      /* Em modo de poupar, o vídeo NÃO carrega e NÃO toca: fica no pôster e o
+         botão vira "play". Antes disso a função inteira desistia aqui, e quem
+         tem "efeitos de animação" desligado no Windows via um hero parado sem
+         nenhuma pista de que havia vídeo e de que dava para assistir. */
+      if (!pouparMovimento) anexar(hero, fonte);
+
+      if (controle) {
+        controle.hidden = false;
+
+        const pintar = () => {
+          const tocando = !hero.paused && hero.src;
+          controle.querySelector('use').setAttribute('href', tocando ? '#i-pausa' : '#i-play');
+          controle.querySelector('.u-visually-hidden').textContent =
+            tocando ? 'Pausar o vídeo de fundo' : 'Reproduzir o vídeo de fundo';
+        };
+
+        controle.addEventListener('click', () => {
+          if (!hero.src) {
+            // Primeira vez em modo de poupar: só agora vale baixar o arquivo.
+            anexar(hero, fonte);
+            return;
+          }
+          if (hero.paused) hero.play().catch(() => {}); else hero.pause();
+        });
+
+        ['play', 'pause', 'loadeddata'].forEach((e) => hero.addEventListener(e, pintar));
+        pintar();
+      }
     }
 
     // Vídeos de apoio só carregam quando entram na tela.

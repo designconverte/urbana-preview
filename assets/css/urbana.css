@@ -668,6 +668,38 @@ body.menu-aberto .header__toggle {
 .hero__midia video { opacity: 0; transition: opacity 600ms ease-out; }
 .hero__midia video.is-pronto { opacity: 1; }
 
+/* Controle do vídeo de fundo.
+   Não é enfeite: o WCAG 2.2.2 exige um jeito de pausar conteúdo que começa
+   sozinho e dura mais de 5 segundos, e o hero roda 9,4s em loop por cima do
+   título. Discreto, mas sempre alcançável pelo teclado. */
+.hero__controle {
+  position: absolute;
+  right: var(--urb-24);
+  bottom: var(--urb-24);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 999px;
+  background: rgba(26, 0, 55, .42);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, .82);
+  cursor: pointer;
+  opacity: .55;
+  transition: opacity var(--urb-rapido), background var(--urb-rapido), border-color var(--urb-rapido);
+}
+.hero__controle:hover,
+.hero__controle:focus-visible { opacity: 1; background: rgba(26, 0, 55, .7); border-color: rgba(255, 255, 255, .4); }
+.hero__controle svg { width: 16px; height: 16px; }
+
+@media (max-width: 760px) {
+  .hero__controle { right: var(--urb-16); bottom: var(--urb-16); width: 36px; height: 36px; }
+}
+
 /* Scrim: a imagem nunca fica sem véu. O contraste do título é lei. */
 .hero__scrim {
   position: absolute;
