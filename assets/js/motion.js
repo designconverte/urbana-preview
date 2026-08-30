@@ -154,51 +154,82 @@
   }
 
   /* ── Razões: a pilha se monta no scroll ───────────────────────────────
-     O pin é CSS `sticky` (zero JS). O ScrollTrigger só cuida da estética de
-     profundidade: quem já chegou encolhe e desfoca conforme os próximos
-     pousam por cima. Sem rotação, porque "nada gira" é regra da marca. */
+     O pin é CSS `sticky` (zero JS). Aqui só a estética de profundidade: quem
+     ficou atrás encolhe e desfoca conforme os próximos POUSAM POR CIMA. Sem
+     rotação, porque "nada gira" é regra da marca.
+
+     POR QUE NÃO É ScrollTrigger.
+     Era, com `trigger: cartao` e `scrub`, e tinha dois defeitos.
+
+     1. O desfoque começava quando o card GRUDAVA, e nesse instante o card
+        seguinte ainda estava fora da tela. Ele borrava sem ter nada por cima,
+        que é o oposto do efeito de profundidade pretendido.
+
+     2. `.razao` é `position: sticky`. Quando um `ScrollTrigger.refresh()` roda
+        com o card já grudado (no `load`, no `fonts.ready` ou ao trocar de
+        filtro), a medição pega a posição TRAVADA em vez da natural e as
+        coordenadas do gatilho saem erradas. Como isso depende de quando as
+        imagens terminam de carregar, o defeito aparecia de forma
+        intermitente, e um refresh manual "consertava".
+
+     Ler a geometria a cada quadro resolve os dois: a sobreposição real entre
+     um card e os seguintes é a própria definição do efeito, e posição medida
+     agora não tem como estar velha. */
 
   function pilhaDeRazoes() {
-    const cartoes = gsap.utils.toArray('.razao');
+    const cartoes = Array.from(document.querySelectorAll('.razao'));
     if (cartoes.length < 2) return;
 
-    /* O pin já é CSS. Aqui só lemos as MESMAS medidas que o CSS usa, para o
-       trigger começar exatamente onde o card gruda, inclusive no celular,
-       onde o passo e a altura do header são menores. */
-    const medida = () => {
-      const raiz = getComputedStyle(document.documentElement);
-      const card = getComputedStyle(cartoes[0]);
-      const alturaHeader = parseFloat(raiz.getPropertyValue('--urb-header')) || 80;
-      const passo = parseFloat(card.getPropertyValue('--razao-passo')) || 18;
-      return { base: alturaHeader + 32, passo };
+    const caixas = cartoes.map((c) => c.querySelector('.razao__caixa'));
+
+    /* Quanto o card `j` já cobriu o card `i`, de 0 a 1.
+       0 = o topo de j ainda está na base de i, nada coberto.
+       1 = o topo de j alcançou o topo de i, cobertura total. */
+    const cobertura = (retI, retJ) => {
+      if (retI.height <= 0) return 0;
+      const avanco = (retI.bottom - retJ.top) / retI.height;
+      return Math.min(1, Math.max(0, avanco));
     };
 
-    const ultimo = cartoes[cartoes.length - 1];
+    let pendente = false;
 
-    cartoes.forEach((cartao, i) => {
-      const profundidade = cartoes.length - 1 - i;
-      if (!profundidade) return;
+    const pintar = () => {
+      pendente = false;
+      const rets = cartoes.map((c) => c.getBoundingClientRect());
 
-      gsap.to(cartao.querySelector('.razao__caixa'), {
-        scale: Math.max(0.9, 1 - profundidade * 0.03),
-        filter: `blur(${(profundidade * 0.9).toFixed(2)}px)`,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: cartao,
-          start: () => {
-            const { base, passo } = medida();
-            return `top ${base + i * passo}`;
-          },
-          endTrigger: ultimo,
-          end: () => {
-            const { base, passo } = medida();
-            return `top ${base + (cartoes.length - 1) * passo}`;
-          },
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
+      cartoes.forEach((cartao, i) => {
+        /* Profundidade = soma do quanto cada card seguinte já cobriu este.
+           Um card totalmente pousado soma 1, e a pilha inteira reproduz a
+           mesma escada de antes, só que ancorada no que está na tela. */
+        let profundidade = 0;
+        for (let j = i + 1; j < cartoes.length; j += 1) {
+          profundidade += cobertura(rets[i], rets[j]);
+        }
+
+        const caixa = caixas[i];
+        if (!caixa) return;
+        if (profundidade <= 0.001) {
+          // Sem nada por cima: limpa em vez de escrever blur(0px), para não
+          // deixar a camada de composição ligada à toa.
+          caixa.style.filter = '';
+          caixa.style.transform = '';
+          return;
+        }
+        caixa.style.filter = `blur(${(profundidade * 0.9).toFixed(2)}px)`;
+        caixa.style.transform = `scale(${Math.max(0.9, 1 - profundidade * 0.03).toFixed(4)})`;
       });
-    });
+    };
+
+    const agendar = () => {
+      if (pendente) return;
+      pendente = true;
+      requestAnimationFrame(pintar);
+    };
+
+    pintar();
+    addEventListener('scroll', agendar, { passive: true });
+    addEventListener('resize', agendar, { passive: true });
+    addEventListener('load', agendar);
   }
 
   /* ── Seção atual no menu ──────────────────────────────────────────────── */

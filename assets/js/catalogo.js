@@ -482,17 +482,24 @@ window.URBANA_MODELOS = [
       { src: 'assets/img/models/voe-x11-4.webp', alt: 'Chave na ignição da Voe X11', recorte: false, detalhe: true },
       { src: 'assets/img/models/voe-x11-5.webp', alt: 'Banco e suspensão traseira da Voe X11', recorte: false, detalhe: true },
     ],
-    /* Ficha corrigida pelo cliente: o catálogo impresso listava duas versões de
-       motor (2000 W e 3000 W) e 70 km/h. O modelo em loja é o de 2000 W, que na
-       tabela do próprio fabricante vem com a bateria de 60V 20Ah. */
+    /* O catálogo impresso lista duas versões de motor (2000 W e 3000 W) e
+       70 km/h. O cliente confirmou 3000 W como a versão padrão da loja.
+
+       ⚠ A BATERIA SAIU DA FICHA por causa dessa troca. O 'Lítio 60V 20Ah' que
+         estava aqui vinha da linha de 2000 W na tabela do fabricante, e não
+         vale mais para a de 3000 W (o X15, também 3000 W, usa 60V 25Ah).
+         Confirmar com a loja e devolver o campo.
+
+       ⚠ A VELOCIDADE de 50 km/h foi informada pelo cliente quando a potência
+         era 2000 W. O catálogo impresso traz 70 km/h para a versão maior.
+         Confirmar se 50 continua valendo. */
     specs: {
       classificacao: 'Ciclomotor · exige registro e habilitação',
       velocidade: { valor: 50, unidade: 'km/h' },
-      potencia: { valor: 2000, unidade: 'W' },
+      potencia: { valor: 3000, unidade: 'W' },
       // O cliente corrigiu para 40 km MAXIMOS: e numero de melhor caso, e a
       // ficha diz isso em vez de deixar parecer comparavel com uma media.
       autonomia: { valor: 40, unidade: 'km', nota: 'Autonomia máxima; varia com peso, relevo e modo de condução.' },
-      bateria: 'Lítio 60V 20Ah',
       recarga: '6 h',
       protecao: 'IP65',
       ocupantes: 'Até 200 kg',
