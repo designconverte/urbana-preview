@@ -796,9 +796,15 @@
           return;
         }
 
-        const cta = e.target.closest('#modal-cta');
-        if (cta && atual) {
-          cta.dataset.rastreado = '1'; // ver a nota de fase de bolha em tracking.js
+        /* `botaoCta`, e nao `cta`: existe uma funcao cta() neste mesmo escopo,
+           que remonta o link do WhatsApp com a cor escolhida. Chamar a variavel
+           de `cta` sombreia a funcao, e o clique no swatch morre com
+           "cta is not a function" DEPOIS de ja ter trocado a galeria. O sintoma
+           e traicoeiro: a foto muda, entao parece que funcionou, mas a mensagem
+           do WhatsApp continua saindo com a primeira cor da lista. */
+        const botaoCta = e.target.closest('#modal-cta');
+        if (botaoCta && atual) {
+          botaoCta.dataset.rastreado = '1'; // ver a nota de fase de bolha em tracking.js
           interesseNoModelo(atual, 'modal', { cor: atual.cores?.[corAtiva]?.nome });
           return;
         }
