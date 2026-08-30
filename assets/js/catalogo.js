@@ -109,6 +109,21 @@ const COR = {
   azul: { nome: 'Azul', hex: '#5CE1E6' },
   amarelo: { nome: 'Amarelo', hex: '#FDCA18' },
   verde: { nome: 'Verde', hex: '#007A37' },
+
+  /* Cores abaixo entraram pelas fotos do X11, e o hex saiu da propria foto,
+     amostrado na faixa de luz caracteristica da lataria (nem o brilho, nem a
+     sombra). E o unico jeito honesto: escolher "no olho" foi o que deixou o
+     azul cadastrado como ciano claro com a moto sendo azul marinho. */
+  grafite: { nome: 'Grafite', hex: '#363C40' },
+  dourado: { nome: 'Dourado', hex: '#AB9A85' },
+
+  /* Cor de arte, nao de pintura chapada: o swatch e a bandeira. O `hex` fica
+     como reserva, para o caso do SVG nao carregar. */
+  reinounido: {
+    nome: 'Reino Unido',
+    hex: '#1B3053',
+    imagem: 'assets/img/swatches/reino-unido.svg',
+  },
 };
 
 const cores = (...chaves) => chaves.map((k) => COR[k]);
@@ -477,7 +492,40 @@ window.URBANA_MODELOS = [
       'Painel, faróis e setas em LED', 'Compartimento extra para bateria',
       'Roda de liga leve aro 10 ou 12', 'Buzina',
     ],
-    cores: cores('branco', 'preto', 'cinza', 'azul', 'vermelho'),
+    /* Oito cores, cinco com foto propria. Branco, cinza e azul continuam na
+       lista sem galeria: ao serem clicadas caem na galeria padrao do modelo,
+       que e o comportamento de fotosDaCorAtiva no app.js.
+
+       Preto e Grafite sao pinturas quase identicas na amostra (#383F47 contra
+       #363C40); a diferenca visivel nas fotos e o banco, marrom num e preto no
+       outro. Ficam separadas porque e assim que a loja vende, e o alt de cada
+       uma diz qual banco, para a pessoa entender por que os dois swatches
+       escuros existem. */
+    cores: [
+      COR.branco,
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-x11-cor-preto.webp', recorte: false,
+          alt: 'Voe X11 preta de perfil, com banco marrom e apoio de costas' },
+      ] },
+      { ...COR.grafite, galeria: [
+        { src: 'assets/img/models/voe-x11-cor-grafite.webp', recorte: false,
+          alt: 'Voe X11 grafite de perfil, com banco preto e apoio de costas' },
+      ] },
+      COR.cinza,
+      COR.azul,
+      { ...COR.vermelho, galeria: [
+        { src: 'assets/img/models/voe-x11-cor-vermelho.webp', recorte: false,
+          alt: 'Voe X11 vermelha em tres quartos frontal, com para-lamas e chassi na cor' },
+      ] },
+      { ...COR.dourado, galeria: [
+        { src: 'assets/img/models/voe-x11-cor-dourado.webp', recorte: false,
+          alt: 'Voe X11 dourada em tres quartos frontal, com para-lamas em tom champanhe' },
+      ] },
+      { ...COR.reinounido, galeria: [
+        { src: 'assets/img/models/voe-x11-cor-reinounido.webp', recorte: false,
+          alt: 'Voe X11 azul marinho de perfil, com a bandeira do Reino Unido nos para-lamas' },
+      ] },
+    ],
   }),
 
   /* ── Voe · triciclo ────────────────────────────────────────────────── */

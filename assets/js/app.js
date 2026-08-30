@@ -710,7 +710,9 @@
         <button class="modal__swatch" type="button" data-cor="${i}"
                 aria-pressed="${i === corAtiva}" aria-label="Cor ${escapar(c.nome)}"
                 title="${escapar(c.nome)}">
-          <i style="background:${escapar(c.hex)}" aria-hidden="true"></i>
+          <i style="${c.imagem
+            ? `background-image:url('${escapar(c.imagem)}');background-size:cover;background-position:center`
+            : `background:${escapar(c.hex)}`}" aria-hidden="true"></i>
         </button>
       `).join('');
     }
