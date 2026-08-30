@@ -12,7 +12,9 @@
    Unificar a nomenclatura entre fabricantes segue pendente com o cliente.
 
    PENDÊNCIAS:
-   · Bravus: não recebemos ficha técnica. Único modelo sem números.
+   · Bravus: ficha recebida. A lista de equipamentos NÃO vem nela, foi herdada
+     da linha Evon: confirmar com a loja se ele tem mesmo marcha ré, NFC e
+     alarme antes de publicar. O tom do Cinza Zenith também é aproximado.
    · Voe Lux e Voe Susan: o catálogo escreve "VEREFICAR CORES" no lugar dos
      swatches, então ficam sem cores até a confirmação.
    · Voe Chopper: removido do site a pedido do cliente. Está no catálogo do
@@ -119,6 +121,15 @@ const CORES_EVON = [
   { nome: 'Vermelho', hex: '#EC1B24' },
 ];
 
+/* O Bravus tem uma cor a mais que Nimbus e Pulse. Só ele ganha lista própria
+   porque só a ficha dele chegou com os cinco tons; se as outras duas também
+   tiverem o Zenith, é trocar as três por esta lista.
+   ⚠ O tom do Zenith é aproximado: a ficha traz o nome, não o código. */
+const CORES_BRAVUS = [
+  ...CORES_EVON,
+  { nome: 'Cinza Zenith', hex: '#53585C' },
+];
+
 /* ── Blocos repetidos ─────────────────────────────────────────────────── */
 
 const EVON_COMUM = {
@@ -185,9 +196,9 @@ window.URBANA_MODELOS = [
     nome: 'Bravus',
     fabricante: 'Evon',
     descritivo: 'Scooter elétrica',
-    categoria: null,      // PENDENTE: ficha técnica do Bravus
-    classificacao: null,
-    chamada: null,
+    categoria: 'autopropelido',
+    classificacao: 'autopropelido',
+    chamada: 'Traços marcantes e personalidade forte para quem valoriza um design de presença e atitude.',
     foto: 'assets/img/models/bravus-card.webp',
     recorte: true,
     alt: 'Scooter elétrica Evon Bravus branca, recorte sem fundo em três quartos',
@@ -197,8 +208,20 @@ window.URBANA_MODELOS = [
       { src: 'assets/img/models/bravus-3.webp', alt: 'Evon Bravus branca em três quartos traseiro, com baú' },
       { src: 'assets/img/models/bravus-4.webp', alt: 'Evon Bravus branca vista de frente' },
     ],
-    specs: null,
-    cores: null,
+    /* Três desvios do EVON_COMUM, todos por causa do que a ficha diz e do que
+       ela NÃO diz:
+       · `recarga` vira 4 h, contra as 6 a 8 h de Nimbus e Pulse.
+       · `bateria` fica de fora: a ficha não traz, e deduzir pela autonomia
+         seria inventar um número que o cliente leria como oficial.
+       · `dimensoes` sai fora pelo mesmo motivo. Entre-eixos e altura são
+         medida de carroceria, e o Bravus tem corpo diferente dos irmãos de
+         linha: repetir os números deles daria um dado errado com cara de certo. */
+    specs: (() => {
+      const { dimensoes, ...base } = EVON_COMUM;
+      return { ...base, autonomia: { valor: 50, unidade: 'km' }, recarga: '4 h' };
+    })(),
+    equipamentos: EVON_EQUIPAMENTOS,
+    cores: CORES_BRAVUS,
     preco: null,
   },
   {
