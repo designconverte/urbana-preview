@@ -540,8 +540,14 @@
 
     /* Cada cor pode ter conjunto próprio de fotos. Enquanto não tiver, o swatch
        apenas muda a mensagem do WhatsApp e a galeria segue a do modelo. */
+    /* A cor troca as fotos do VEICULO INTEIRO. As marcadas com `detalhe: true`
+       ficam sempre, porque chave, banco e suspensao nao mudam de cor: some-las
+       a cada troca obrigaria a pessoa a voltar para a primeira cor so para ver
+       o acabamento, e ela nao tem como adivinhar que precisa fazer isso. */
     function fotosDaCorAtiva(m) {
-      return m.cores?.[corAtiva]?.galeria || m.galeria || [];
+      const daCor = m.cores?.[corAtiva]?.galeria;
+      if (!daCor) return m.galeria || [];
+      return [...daCor, ...(m.galeria || []).filter((f) => f.detalhe)];
     }
 
     function galeria(m, indice = 0) {
@@ -813,13 +819,14 @@
 
         const swatch = e.target.closest('[data-cor]');
         if (swatch) {
-          const anterior = fotosDaCorAtiva(atual);
+          /* Compara pelo SRC da primeira foto, nao pela referencia do array:
+             fotosDaCorAtiva monta um array novo a cada chamada quando a cor tem
+             galeria, entao `!==` seria sempre verdadeiro e o slider voltaria ao
+             inicio ate trocando para uma cor sem foto propria. */
+          const anterior = fotosDaCorAtiva(atual)[0]?.src;
           corAtiva = Number(swatch.dataset.cor);
           cores(atual);
-          /* Só remonta o slider se esta cor tiver fotos próprias. Sem isso, o
-             clique jogaria o visitante de volta para a primeira foto sem que
-             nada na imagem tivesse mudado. */
-          if (fotosDaCorAtiva(atual) !== anterior) galeria(atual, 0);
+          if (fotosDaCorAtiva(atual)[0]?.src !== anterior) galeria(atual, 0);
           cta();
         }
       });

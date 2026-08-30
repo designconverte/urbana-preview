@@ -470,8 +470,12 @@ window.URBANA_MODELOS = [
       { src: 'assets/img/models/voe-x11-1.webp', alt: 'Ciclomotor elétrico Voe X11 branco de pneus largos, recorte sem fundo' },
       { src: 'assets/img/models/voe-x11-2.webp', alt: 'Voe X11 preta e dourada, recorte sem fundo' },
       { src: 'assets/img/models/voe-x11-3.webp', alt: 'Voe X11 preta vista de frente, na rua', recorte: false },
-      { src: 'assets/img/models/voe-x11-4.webp', alt: 'Chave na ignição da Voe X11', recorte: false },
-      { src: 'assets/img/models/voe-x11-5.webp', alt: 'Banco e suspensão traseira da Voe X11', recorte: false },
+      /* `detalhe: true` = a foto sobrevive a troca de cor. Vale para
+         acabamento e componente, nao para o veiculo inteiro: as tres de cima
+         mostram a moto branca, preta e preta-dourada, e mante-las ao lado de
+         uma vermelha selecionada confundiria em vez de informar. */
+      { src: 'assets/img/models/voe-x11-4.webp', alt: 'Chave na ignição da Voe X11', recorte: false, detalhe: true },
+      { src: 'assets/img/models/voe-x11-5.webp', alt: 'Banco e suspensão traseira da Voe X11', recorte: false, detalhe: true },
     ],
     /* Ficha corrigida pelo cliente: o catálogo impresso listava duas versões de
        motor (2000 W e 3000 W) e 70 km/h. O modelo em loja é o de 2000 W, que na
