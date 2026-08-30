@@ -355,29 +355,64 @@
        sentinela de 1px logo acima dela: quando a sentinela sai da área visível
        descontada a altura do header, o filtro encostou. Comparar scrollY com
        offsetTop erraria toda vez que a altura do header mudasse de breakpoint. */
+    /**
+     * A barra de filtro gruda embaixo do header.
+     *
+     * POR QUE NAO E IntersectionObserver AQUI.
+     * Era, e estava errado. `!entrada.isIntersecting` e verdadeiro em DUAS
+     * situacoes opostas: a sentinela acima da viewport (rolou alem, deve
+     * grudar) e a sentinela abaixo (ainda nem chegou, nao deve). O codigo
+     * tratava as duas como grudada, entao a barra carregava o visual de
+     * grudada desde o load e PISCAVA para o estado normal justo quando a
+     * pessoa chegava na vitrine.
+     *
+     * Comparar a geometria resolve porque a comparacao e SINALIZADA: `top`
+     * negativo e acima, `top` grande e abaixo. O IntersectionObserver so sabe
+     * dizer "cruza ou nao cruza".
+     *
+     * O custo e um getBoundingClientRect por quadro COM rolagem acontecendo,
+     * que e O(1) e nao forca layout: o navegador ja calculou o que precisa
+     * para rolar. A altura do header fica em cache porque getComputedStyle
+     * todo quadro seria caro de verdade.
+     */
     function grudar() {
       const barraFiltroEl = $('#filtro');
       const sentinela = $('#filtro-sentinela');
-      if (!barraFiltroEl || !sentinela || !('IntersectionObserver' in window)) return;
+      if (!barraFiltroEl || !sentinela) return;
 
-      let observador = null;
-      const montar = () => {
-        observador?.disconnect();
+      let alturaHeader = 80;
+      const medirHeader = () => {
         const raiz = getComputedStyle(document.documentElement);
-        const alturaHeader = parseFloat(raiz.getPropertyValue('--urb-header')) || 80;
-        observador = new IntersectionObserver(
-          ([entrada]) => barraFiltroEl.classList.toggle('is-fixo', !entrada.isIntersecting),
-          { rootMargin: `-${Math.round(alturaHeader) + 10}px 0px 0px 0px`, threshold: 0 },
-        );
-        observador.observe(sentinela);
+        alturaHeader = parseFloat(raiz.getPropertyValue('--urb-header')) || 80;
       };
 
-      montar();
-      // A altura do header muda de breakpoint, e com ela a margem do observador.
+      let pendente = false;
+      const conferir = () => {
+        pendente = false;
+        barraFiltroEl.classList.toggle(
+          'is-fixo',
+          sentinela.getBoundingClientRect().top < alturaHeader + 10,
+        );
+      };
+
+      const agendar = () => {
+        if (pendente) return;
+        pendente = true;
+        requestAnimationFrame(conferir);
+      };
+
+      medirHeader();
+      conferir(); // estado correto ja na carga, sem esperar a primeira rolagem
+      addEventListener('scroll', agendar, { passive: true });
+
+      /* Filtrar muda a altura da pagina e pode mover a sentinela sem gerar
+         scroll: o `load` cobre a fonte tardia, e o `resize` cobre a troca de
+         breakpoint, que muda a altura do header. */
+      addEventListener('load', () => { medirHeader(); conferir(); });
       let agendado = null;
       addEventListener('resize', () => {
         clearTimeout(agendado);
-        agendado = setTimeout(montar, 150);
+        agendado = setTimeout(() => { medirHeader(); conferir(); }, 150);
       });
     }
 
@@ -556,15 +591,18 @@
       if (!fotos.length) return;
       const i = Math.min(indice, fotos.length - 1);
 
-      /* Cada foto pode desligar o recorte por conta própria: algumas vieram do
-         fabricante sobre fundo branco e ficariam com moldura no poço claro. */
+      /* Três enquadramentos, nesta ordem de precedência:
+           is-recorte  recorte com alfa: cabe inteiro + sombra projetada
+           is-inteira  foto de estúdio: cabe inteira, sem sombra
+           (nenhuma)   preenche o quadro, para close de detalhe e foto de rua */
       trilho.innerHTML = fotos.map((f, k) => {
         const recorte = f.recorte !== false && m.recorte;
+        const enquadra = recorte ? 'is-recorte' : (f.inteira ? 'is-inteira' : '');
         return `
           <div class="modal__slide" role="group" aria-roledescription="slide"
                aria-label="${k + 1} de ${fotos.length}">
             <img src="${f.src}" alt="${escapar(f.alt)}" draggable="false"
-                 class="${recorte ? 'is-recorte' : ''}" decoding="async">
+                 class="${enquadra}" decoding="async">
           </div>`;
       }).join('');
 
@@ -691,7 +729,16 @@
         .map(([chave, rotulo]) => {
           const bruto = m.specs[chave];
           const valor = typeof bruto === 'object' ? `${bruto.valor} ${bruto.unidade}` : bruto;
-          return `<div><dt>${rotulo}</dt><dd>${escapar(valor)}</dd></div>`;
+          /* Numero com condicao carrega a condicao NA MESMA LINHA. Autonomia
+             "media" e autonomia "maxima" sao promessas diferentes, e mostradas
+             como numero puro parecem comparaveis: quem olha 50 km do Bravus ao
+             lado de 40 km do X11 nao tem como saber que um e tipico e o outro
+             e melhor caso. Rodape com asterisco nao resolve, porque ninguem
+             associa de volta. */
+          const nota = typeof bruto === 'object' && bruto.nota
+            ? `<small class="ficha__nota">${escapar(bruto.nota)}</small>`
+            : '';
+          return `<div><dt>${rotulo}</dt><dd>${escapar(valor)}${nota}</dd></div>`;
         }).join('');
     }
 
@@ -702,6 +749,43 @@
       if (!itens.length) return;
       $('#modal-equipamentos-lista').innerHTML =
         itens.map((item) => `<li>${escapar(item)}</li>`).join('');
+    }
+
+    /**
+     * O fundo da bolinha do swatch, em ordem de precedencia.
+     *
+     *   bicolor -> degrade -> imagem -> hex
+     *
+     * SEGURANCA. O valor entra numa declaracao CSS dentro de um atributo
+     * `style`, entao sao DOIS escapes aninhados: o de HTML, que `escapar`
+     * resolve, e o de CSS, que ele nao alcanca. Um caminho com aspas,
+     * parenteses ou barra invertida FECHA a `url()` e o resto vira declaracao
+     * arbitraria. Verificado: `x.svg'); background:red; --x:url('` pintava a
+     * bolinha de vermelho.
+     *
+     * Caminho suspeito e DESCARTADO, nao remendado: escapar caractere por
+     * caractere convida a errar um. Ele cai no `hex`, que e a reserva.
+     *
+     * Nos dois casos de gradiente o hex e validado contra /^#[0-9a-fA-F]{6}$/
+     * antes de entrar, entao nao sobra superficie.
+     */
+    const HEX_VALIDO = /^#[0-9a-fA-F]{6}$/;
+    const parDeHex = (v) => Array.isArray(v) && v.length === 2 && v.every((h) => HEX_VALIDO.test(h));
+
+    function fundoDoSwatch(c) {
+      // Divisao dura: e assim que a lataria sai da fabrica numa pintura de
+      // duas cores. Degrade suave aqui mentiria sobre o produto.
+      if (parDeHex(c.bicolor)) {
+        return `background:linear-gradient(90deg, ${c.bicolor[0]} 50%, ${c.bicolor[1]} 50%)`;
+      }
+      // Metalico: um hex chapado achata a cor e nao parece a moto.
+      if (parDeHex(c.degrade)) {
+        return `background:linear-gradient(${c.degrade[0]}, ${c.degrade[1]})`;
+      }
+      if (c.imagem && !/["'()\\]/.test(c.imagem)) {
+        return `background:url('${c.imagem}') center/cover no-repeat`;
+      }
+      return `background:${HEX_VALIDO.test(c.hex || '') ? c.hex : 'transparent'}`;
     }
 
     function cores(m) {
@@ -716,9 +800,7 @@
         <button class="modal__swatch" type="button" data-cor="${i}"
                 aria-pressed="${i === corAtiva}" aria-label="Cor ${escapar(c.nome)}"
                 title="${escapar(c.nome)}">
-          <i style="${c.imagem
-            ? `background-image:url('${escapar(c.imagem)}');background-size:cover;background-position:center`
-            : `background:${escapar(c.hex)}`}" aria-hidden="true"></i>
+          <i style="${fundoDoSwatch(c)}" aria-hidden="true"></i>
         </button>
       `).join('');
     }

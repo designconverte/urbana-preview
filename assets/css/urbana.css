@@ -1230,6 +1230,34 @@ body.menu-aberto .header__toggle {
   padding: 2.5%;
   filter: drop-shadow(0 16px 14px rgba(26, 0, 55, .16));
 }
+
+/* Terceiro enquadramento. `recorte` decidia duas coisas de uma vez, e faltava
+   um caso: a foto de ESTUDIO sobre fundo liso, que precisa caber inteira mas
+   nao e recorte com alfa e por isso nao leva sombra.
+
+   Sem isto ela caia no `cover` do padrao e era cortada: medido em 37% da area
+   do arquivo na foto vermelha do X11, o suficiente para decepar a roda
+   dianteira. `cover` continua certo para close de detalhe e foto de rua, onde
+   preencher o quadro e o desejado. */
+/* Condicao de uma alegacao da ficha. Menor e mais apagada que o valor: ela
+   qualifica, nao compete. */
+.ficha__nota {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: .01em;
+  color: rgba(255, 255, 255, .5);
+}
+
+.modal__slide img.is-inteira {
+  object-fit: contain;
+  /* Branco, e nao a Nevoa do poco: a foto do fabricante ja vem sobre branco,
+     entao a area vazia do `contain` precisa casar com o fundo DELA, senao
+     aparece um retangulo mais claro dentro da moldura. */
+  background: #FFFFFF;
+}
 .modal__miniaturas {
   display: flex;
   gap: var(--urb-8);

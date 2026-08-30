@@ -233,7 +233,12 @@ window.URBANA_MODELOS = [
          linha: repetir os números deles daria um dado errado com cara de certo. */
     specs: (() => {
       const { dimensoes, ...base } = EVON_COMUM;
-      return { ...base, autonomia: { valor: 50, unidade: 'km' }, recarga: '4 h' };
+      // A ficha do Bravus diz autonomia MEDIA, nao maxima.
+      return {
+        ...base,
+        autonomia: { valor: 50, unidade: 'km', nota: 'Autonomia média informada pelo fabricante.' },
+        recarga: '4 h',
+      };
     })(),
     equipamentos: EVON_EQUIPAMENTOS,
     cores: CORES_BRAVUS,
@@ -484,7 +489,9 @@ window.URBANA_MODELOS = [
       classificacao: 'Ciclomotor · exige registro e habilitação',
       velocidade: { valor: 50, unidade: 'km/h' },
       potencia: { valor: 2000, unidade: 'W' },
-      autonomia: { valor: 40, unidade: 'km' },
+      // O cliente corrigiu para 40 km MAXIMOS: e numero de melhor caso, e a
+      // ficha diz isso em vez de deixar parecer comparavel com uma media.
+      autonomia: { valor: 40, unidade: 'km', nota: 'Autonomia máxima; varia com peso, relevo e modo de condução.' },
       bateria: 'Lítio 60V 20Ah',
       recarga: '6 h',
       protecao: 'IP65',
@@ -508,25 +515,25 @@ window.URBANA_MODELOS = [
     cores: [
       COR.branco,
       { ...COR.preto, galeria: [
-        { src: 'assets/img/models/voe-x11-cor-preto.webp', recorte: false,
+        { src: 'assets/img/models/voe-x11-cor-preto.webp', recorte: false, inteira: true,
           alt: 'Voe X11 preta de perfil, com banco marrom e apoio de costas' },
       ] },
       { ...COR.grafite, galeria: [
-        { src: 'assets/img/models/voe-x11-cor-grafite.webp', recorte: false,
+        { src: 'assets/img/models/voe-x11-cor-grafite.webp', recorte: false, inteira: true,
           alt: 'Voe X11 grafite de perfil, com banco preto e apoio de costas' },
       ] },
       COR.cinza,
       COR.azul,
       { ...COR.vermelho, galeria: [
-        { src: 'assets/img/models/voe-x11-cor-vermelho.webp', recorte: false,
+        { src: 'assets/img/models/voe-x11-cor-vermelho.webp', recorte: false, inteira: true,
           alt: 'Voe X11 vermelha em tres quartos frontal, com para-lamas e chassi na cor' },
       ] },
       { ...COR.dourado, galeria: [
-        { src: 'assets/img/models/voe-x11-cor-dourado.webp', recorte: false,
+        { src: 'assets/img/models/voe-x11-cor-dourado.webp', recorte: false, inteira: true,
           alt: 'Voe X11 dourada em tres quartos frontal, com para-lamas em tom champanhe' },
       ] },
       { ...COR.reinounido, galeria: [
-        { src: 'assets/img/models/voe-x11-cor-reinounido.webp', recorte: false,
+        { src: 'assets/img/models/voe-x11-cor-reinounido.webp', recorte: false, inteira: true,
           alt: 'Voe X11 azul marinho de perfil, com a bandeira do Reino Unido nos para-lamas' },
       ] },
     ],
