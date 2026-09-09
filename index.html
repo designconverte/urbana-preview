@@ -14,7 +14,10 @@
 <meta property="og:site_name" content="Urbana Mobilidade Elétrica">
 <meta property="og:title" content="Motos e Scooters Elétricas em Piracicaba · Urbana Mobilidade Elétrica">
 <meta property="og:description" content="Scooters, autopropelidos, ciclomotores, e-bikes e triciclos elétricos. Test ride com hora marcada e oficina própria em São Dimas, Piracicaba.">
-<meta property="og:image" content="assets/img/showroom/showroom-equipe.webp">
+<meta property="og:image" content="assets/img/social/urbana-compartilhamento.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Urbana Mobilidade Elétrica · Piracicaba/SP">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" href="assets/img/brand/urbana-vertical.svg" type="image/svg+xml">
@@ -56,16 +59,6 @@
     <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
   </symbol>
 </svg>
-
-<!-- 01 · barra de anúncio ----------------------------------------------- -->
-<div class="anuncio" role="region" aria-label="Aviso da loja">
-  <span class="anuncio__pulso" aria-hidden="true"></span>
-  <p class="anuncio__texto">
-    <strong>Loja aberta em São Dimas<span class="anuncio__extra">, Piracicaba</span>.</strong>
-    <span class="anuncio__extra">Test ride com hora marcada.</span>
-    <a href="#test-ride">Agendar test ride</a>
-  </p>
-</div>
 
 <!-- 02 · header --------------------------------------------------------- -->
 <header class="header" id="header">
@@ -138,20 +131,15 @@
 
     <div class="u-container">
       <div class="hero__conteudo">
-        <p class="hero__selo" data-anima>
-          <span class="anuncio__pulso" aria-hidden="true"></span>
-          <span class="hero__selo-longo">Showroom multimarcas e oficina própria · São Dimas, Piracicaba/SP</span>
-          <span class="hero__selo-curto">Showroom e oficina · São Dimas</span>
-        </p>
-
         <h1 class="t-display hero__titulo" id="hero-titulo" data-anima data-anima-linhas>
           As melhores marcas de motos<br>e bikes elétricas em Piracicaba.
         </h1>
 
         <p class="t-lead hero__lead" data-anima>
-          Autopropelido dispensa CNH, emplacamento
-          e IPVA; também temos ciclomotores, e-bikes e triciclos elétricos. Oficina
-          especializada própria e test ride com hora marcada.
+          Autopropelido dispensa CNH, emplacamento e IPVA; também temos
+          ciclomotores, e-bikes e triciclos elétricos.
+          <strong class="hero__destaque">Oficina especializada própria e test ride
+          com hora marcada.</strong>
         </p>
 
         <div class="u-acoes" data-anima>
@@ -174,7 +162,6 @@
       <div class="marcas__linha">
         <img class="marcas__logo marcas__logo--evon" src="assets/img/brand/marcas/evon.svg" alt="Evon" width="743" height="147" loading="lazy" decoding="async">
         <img class="marcas__logo marcas__logo--voe" src="assets/img/brand/marcas/voe.svg" alt="Voe" width="379" height="103" loading="lazy" decoding="async">
-        <img class="marcas__logo marcas__logo--motochefe" src="assets/img/brand/marcas/motochefe.svg" alt="MotoChefe" width="313" height="93" loading="lazy" decoding="async">
       </div>
     </div>
   </section>
@@ -248,7 +235,6 @@
             <li><span class="compara__marca" aria-hidden="true">!</span><span>Acima de <strong>32 km/h</strong> ou <strong>1000 W</strong></span></li>
             <li><span class="compara__marca" aria-hidden="true">!</span><span>Exige ACC ou CNH categoria A</span></li>
             <li><span class="compara__marca" aria-hidden="true">!</span><span>Registro, emplacamento e licenciamento</span></li>
-            <li><span class="compara__marca" aria-hidden="true">!</span><span>A Urbana entrega a documentação do primeiro emplacamento</span></li>
           </ul>
           <div class="u-tags"><span class="tag tag--exige">Exige emplacamento</span><span class="tag tag--exige">Exige CNH ou ACC</span></div>
         </div>
@@ -611,6 +597,20 @@
   <div class="modal__scrim" data-fechar-modal></div>
   <div class="modal__caixa">
     <button class="modal__fechar" type="button" data-fechar-modal aria-label="Fechar detalhes do modelo">✕</button>
+
+    <div class="modal__navegacao" id="modal-navegacao" hidden>
+      <button class="modal__passo" type="button" id="modal-anterior" data-modelo-passo="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 5l-7 7 7 7"/>
+        </svg>
+      </button>
+      <span class="modal__posicao" id="modal-posicao" aria-live="polite"></span>
+      <button class="modal__passo" type="button" id="modal-proximo" data-modelo-passo="1">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
 
     <div class="modal__galeria">
       <div class="modal__slider" id="modal-slider" tabindex="0" data-lenis-prevent

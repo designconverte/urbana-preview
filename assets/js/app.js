@@ -106,12 +106,7 @@
     let ticking = false;
 
     const atualizar = () => {
-      const y = window.scrollY;
-      header.classList.toggle('is-fixo', y > 8);
-
-      // O CTA aparece depois de 25% de scroll (styleguide §06).
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      flutuante.classList.toggle('is-visivel', total > 0 && y / total > 0.25);
+      header.classList.toggle('is-fixo', window.scrollY > 8);
       ticking = false;
     };
 
@@ -122,6 +117,17 @@
     }, { passive: true });
 
     atualizar();
+
+    /* O CTA flutuante fica visível desde o hero, a pedido do cliente.
+       O styleguide §06 mandava esperar 25% de rolagem, e a regra era boa no
+       papel: no hero já existem dois botões e o do header, então o flutuante
+       chega como quarto caminho para a mesma ação. Mas 25% de uma página de
+       ~24.000 px cai DEPOIS da vitrine inteira, e quem entra por anúncio e
+       não rola nunca via o botão. A decisão é do cliente e está registrada.
+
+       O quadro de espera é só para ele entrar com o fade do CSS em vez de
+       aparecer pronto junto com o resto da página. */
+    requestAnimationFrame(() => flutuante.classList.add('is-visivel'));
   }
 
   /* ── 3. Menu mobile ───────────────────────────────────────────────────── */
@@ -219,7 +225,25 @@
     const nota = $('#filtro-nota');
     let ativa = 'todos';
 
-    const modelos = () => window.URBANA_MODELOS || [];
+    /* A vitrine segue URBANA_ORDEM; quem não está nela mantém a posição do
+       catálogo, atrás dos priorizados. `Infinity` como posição padrão é o que
+       faz isso acontecer sem lista de exceção. */
+    const modelos = () => {
+      const todos = window.URBANA_MODELOS || [];
+      const prioridade = window.URBANA_ORDEM || [];
+      if (!prioridade.length) return todos;
+
+      const posicao = new Map(prioridade.map((id, i) => [id, i]));
+      return todos
+        .map((m, i) => ({ m, i }))
+        .sort((a, b) => {
+          const pa = posicao.has(a.m.id) ? posicao.get(a.m.id) : Infinity;
+          const pb = posicao.has(b.m.id) ? posicao.get(b.m.id) : Infinity;
+          // Empate (ambos fora da lista) resolve pela ordem do catálogo.
+          return pa - pb || a.i - b.i;
+        })
+        .map((x) => x.m);
+    };
     const contar = (id) => (id === 'todos' ? modelos().length : modelos().filter((m) => m.categoria === id).length);
 
     /* No máximo três números por card, sempre nesta ordem. Só entram os que o
@@ -269,11 +293,12 @@
       const categoria = classe ? classe.extenso : m.descritivo;
       return `
         <article class="card" data-categoria="${m.categoria || ''}" data-id="${m.id}" data-anima>
-          <div class="card__foto${m.recorte ? ' card__foto--recorte' : ''}">
+          <button class="card__foto${m.recorte ? ' card__foto--recorte' : ''}" type="button"
+                  data-detalhes="${m.id}" aria-label="Ver detalhes do ${escapar(`${m.fabricante} ${m.nome}`)}">
             <img src="${m.foto}" alt="${escapar(m.alt)}" loading="lazy" decoding="async" width="900" height="675">
             <div class="card__tags u-tags">${etiquetas(m)}</div>
             <span class="card__fabricante">${escapar(m.fabricante)}</span>
-          </div>
+          </button>
           <div class="card__corpo">
             <div>
               <p class="card__categoria">${escapar(categoria)}</p>
@@ -288,8 +313,14 @@
         </article>`;
     }
 
+    /* A lista que está na tela agora, já filtrada e na ordem de prioridade.
+       O modal usa isto para as setas percorrerem o mesmo recorte que a pessoa
+       escolheu, em vez do catálogo inteiro. */
+    const visiveisAgora = () =>
+      (ativa === 'todos' ? modelos() : modelos().filter((m) => m.categoria === ativa));
+
     function render() {
-      const visiveis = ativa === 'todos' ? modelos() : modelos().filter((m) => m.categoria === ativa);
+      const visiveis = visiveisAgora();
       grade.innerHTML = visiveis.map(card).join('');
       grade.hidden = visiveis.length === 0;
 
@@ -441,7 +472,7 @@
       });
     }
 
-    return { iniciar, filtrar };
+    return { iniciar, filtrar, visiveis: visiveisAgora };
   })();
 
   /* ── 6. Facho de luz na borda do card ─────────────────────────────────
@@ -585,6 +616,10 @@
       return [...daCor, ...(m.galeria || []).filter((f) => f.detalhe)];
     }
 
+    /* Declarado aqui, e nao junto do swatch: a galeria usa isto para validar o
+       `fundo` de cada foto, e ela vem antes no arquivo. */
+    const HEX_VALIDO = /^#[0-9a-fA-F]{6}$/;
+
     function galeria(m, indice = 0) {
       const trilho = $('#modal-slider');
       const fotos = fotosDaCorAtiva(m);
@@ -602,7 +637,7 @@
           <div class="modal__slide" role="group" aria-roledescription="slide"
                aria-label="${k + 1} de ${fotos.length}">
             <img src="${f.src}" alt="${escapar(f.alt)}" draggable="false"
-                 class="${enquadra}" decoding="async">
+                 class="${enquadra}"${f.fundo && HEX_VALIDO.test(f.fundo) ? ` style="background:${f.fundo}"` : ''} decoding="async">
           </div>`;
       }).join('');
 
@@ -769,7 +804,6 @@
      * Nos dois casos de gradiente o hex e validado contra /^#[0-9a-fA-F]{6}$/
      * antes de entrar, entao nao sobra superficie.
      */
-    const HEX_VALIDO = /^#[0-9a-fA-F]{6}$/;
     const parDeHex = (v) => Array.isArray(v) && v.length === 2 && v.every((h) => HEX_VALIDO.test(h));
 
     function fundoDoSwatch(c) {
@@ -814,10 +848,48 @@
         : linkWhats('modelo', { modelo: nome });
     }
 
+    /* `irParaModelo`, e não `irPara`: já existe um `irPara(indice)` neste
+       escopo que move o SLIDER de fotos. Nome repetido aqui sombrearia a
+       navegação da galeria. */
+    function vizinhos() {
+      const lista = vitrine.visiveis();
+      const i = lista.findIndex((m) => m.id === atual?.id);
+      if (i < 0) return { lista, i, anterior: null, proximo: null };
+      return {
+        lista,
+        i,
+        anterior: lista[(i - 1 + lista.length) % lista.length] || null,
+        proximo: lista[(i + 1) % lista.length] || null,
+      };
+    }
+
+    function setas() {
+      const bloco = $('#modal-navegacao');
+      if (!bloco) return;
+      const { lista, i, anterior, proximo } = vizinhos();
+
+      // Com um modelo só na tela, navegar não tem para onde ir.
+      bloco.hidden = lista.length < 2 || i < 0;
+      if (bloco.hidden) return;
+
+      $('#modal-anterior').setAttribute('aria-label', `Ver ${anterior.fabricante} ${anterior.nome}`);
+      $('#modal-proximo').setAttribute('aria-label', `Ver ${proximo.fabricante} ${proximo.nome}`);
+      $('#modal-posicao').textContent = `${i + 1} de ${lista.length}`;
+    }
+
+    function irParaModelo(direcao) {
+      const { anterior, proximo } = vizinhos();
+      const alvo = direcao < 0 ? anterior : proximo;
+      if (alvo) abrir(alvo.id);
+    }
+
     function abrir(id, gatilho) {
       atual = (window.URBANA_MODELOS || []).find((m) => m.id === id);
       if (!atual) return;
-      origem = gatilho || null;
+      /* Só guarda o gatilho quando ele vem. Navegando de modelo em modelo, o
+         foco tem que voltar para o card de onde a pessoa entrou, e não para um
+         botão que ela nunca tocou. */
+      if (gatilho !== undefined) origem = gatilho || null;
       corAtiva = 0;
 
       const classe = atual.classificacao ? window.URBANA_CLASSIFICACOES[atual.classificacao] : null;
@@ -834,6 +906,7 @@
       equipamentos(atual);
       cores(atual);
       cta();
+      setas();
       $('#modal-corpo').scrollTop = 0;
 
       emitir('view_item', {
@@ -876,6 +949,9 @@
 
         const mini = e.target.closest('[data-foto]');
         if (mini) { irPara(Number(mini.dataset.foto)); return; }
+
+        const seta = e.target.closest('[data-modelo-passo]');
+        if (seta) { irParaModelo(Number(seta.dataset.modeloPasso)); return; }
 
         /* Clique na foto grande abre a versão inteira, sem corte.
            O alvo é o TRILHO, não o slide: durante o arrasto o trilho captura o

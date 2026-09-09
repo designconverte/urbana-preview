@@ -426,7 +426,9 @@ a:hover { color: var(--urb-roxo-eletrico); }
 
 /* Área de respiro do logo: X = altura do símbolo ÷ 2, aqui o padding da barra. */
 .header__logo { display: flex; align-items: center; flex: none; }
-.header__logo img { height: 34px; width: auto; }
+/* 34 -> 46 px a pedido do cliente. O header tem 80 px, entao 46 ainda deixa
+   17 px de respiro em cima e embaixo. */
+.header__logo img { height: 46px; width: auto; }
 
 .header__nav {
   display: flex;
@@ -691,6 +693,16 @@ body.menu-aberto .header__toggle {
    ritmo de duas linhas se cada oração couber inteira na medida. */
 .hero__titulo { font-size: clamp(29px, 3.9vw, 52px); line-height: 1.06; text-wrap: balance; }
 .hero__lead { font-size: clamp(15.5px, 1.3vw, 18px); line-height: 1.62; }
+
+/* Quebra de linha e destaque na oficina, a pedido do cliente. `display: block`
+   e o que garante a linha propria sem depender de um <br>, que quebraria no
+   lugar errado quando a largura muda. */
+.hero__destaque {
+  display: block;
+  margin-top: var(--urb-12);
+  color: var(--urb-branco);
+  font-weight: 600;
+}
 
 /* Escala do celular pedida pelo cliente. O título sobe para 36 px e ainda
    ocupa MENOS altura que antes, porque a chamada encurtou de 61 para 37
@@ -1053,6 +1065,19 @@ body.menu-aberto .header__toggle {
   aspect-ratio: 5 / 4;
   background: var(--urb-nevoa);
   overflow: hidden;
+
+  /* É um <button>, para a foto abrir os detalhes no clique e o teclado
+     alcançar. Botão traz borda, fundo, fonte e display próprios do navegador:
+     sem este reset ele ganharia moldura cinza e pararia de ocupar a linha. */
+  display: block;
+  width: 100%;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
 }
 .card__foto img {
   width: 100%;
@@ -1411,6 +1436,56 @@ body.menu-aberto .header__toggle {
 /* Anel de 2 px em Roxo Elétrico na cor ativa, destacado da bolinha. */
 .modal__swatch[aria-pressed="true"] i {
   box-shadow: 0 0 0 2px var(--urb-roxo-eletrico), inset 0 0 0 1px rgba(255, 255, 255, .35);
+}
+
+/* Navegação entre modelos sem fechar a janela.
+   Fica no canto superior, em par com o botão de fechar, e NÃO por cima da
+   foto: sobreposta ao slider, ela brigaria com o arrastar da galeria, que já
+   ocupa a lateral da imagem. */
+.modal__navegacao {
+  position: absolute;
+  left: var(--urb-12);
+  top: var(--urb-12);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--urb-8);
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(26, 0, 55, .42);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.modal__passo {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: rgba(255, 255, 255, .85);
+  cursor: pointer;
+  transition: background var(--urb-rapido), color var(--urb-rapido);
+}
+.modal__passo:hover { background: rgba(255, 255, 255, .16); color: var(--urb-branco); }
+.modal__passo svg { width: 17px; height: 17px; }
+
+.modal__posicao {
+  min-width: 5ch;
+  text-align: center;
+  font-family: var(--urb-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: rgba(255, 255, 255, .7);
+}
+
+@media (max-width: 760px) {
+  .modal__navegacao { left: var(--urb-8); top: var(--urb-8); }
+  .modal__passo { width: 30px; height: 30px; }
 }
 
 .modal__fechar {
@@ -1965,6 +2040,42 @@ input[type="range"]::-moz-range-thumb {
   transition: opacity var(--urb-medio), transform var(--urb-medio), visibility var(--urb-medio), background var(--urb-rapido), bottom var(--urb-medio);
 }
 .flutuante.is-visivel { opacity: 1; visibility: visible; transform: none; }
+/* Radar: dois aneis que nascem no botao e se expandem, em ciclo lento.
+   O cliente pediu "piscando sempre"; piscar de verdade e desaconselhavel
+   (o WCAG 2.3.1 limita conteudo que pisca a menos de 3 vezes por segundo,
+   por risco de convulsao fotossensivel) e, para quem nao tem esse risco,
+   cansa e vira ruido. O radar chama a mesma atencao sem trocar a opacidade
+   do botao: quem le o rotulo continua lendo. */
+@keyframes urb-radar {
+  0%   { transform: scale(1);   opacity: .55; }
+  70%  { transform: scale(2.1); opacity: 0; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+
+.flutuante::before,
+.flutuante::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--urb-verde-carga);
+  animation: urb-radar 2.8s cubic-bezier(.2, .7, .3, 1) infinite;
+}
+/* O segundo anel sai na metade do ciclo: o pulso vira continuo em vez de
+   sumir e reaparecer. */
+.flutuante::after { animation-delay: 1.4s; }
+
+/* Parado no hover: quem ja encontrou o botao nao precisa mais ser chamado, e
+   o anel competiria com o proprio clique. */
+.flutuante:hover::before,
+.flutuante:hover::after { animation-play-state: paused; opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flutuante::before,
+  .flutuante::after { animation: none; opacity: 0; }
+}
+
 .flutuante:hover { background: #4AEBA6; color: #0A2A1B; }
 .flutuante svg { width: 24px; height: 24px; flex: none; }
 

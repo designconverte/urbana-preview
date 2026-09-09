@@ -32,11 +32,11 @@ window.URBANA_CONFIG = {
     },
   },
 
-  /* ⚠ CONFIRMAR COM A LOJA antes de publicar, porque o horário não foi informado.
-     Enquanto `confirmado` for false, o rodapé mostra "consulte pelo WhatsApp"
-     em vez de um horário que pode estar errado. */
+  /* Confirmado pela loja em setembro de 2026. Enquanto `confirmado` for false,
+     o rodapé mostra "consulte pelo WhatsApp" em vez de um horário que pode
+     estar errado. */
   horarios: {
-    confirmado: false,
+    confirmado: true,
     semana: 'Segunda a sexta · 9h às 18h',
     sabado: 'Sábado · 9h às 13h',
   },

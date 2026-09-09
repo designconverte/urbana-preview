@@ -62,17 +62,17 @@ window.URBANA_CATEGORIAS = [
   {
     id: 'ciclomotor',
     nome: 'Ciclomotores',
-    nota: 'Ciclomotores: mais desempenho, exigem ACC ou CNH categoria A, registro e emplacamento. A Urbana entrega a documentação do primeiro emplacamento.',
+    nota: 'Ciclomotores: mais desempenho, exigem ACC ou CNH categoria A, registro e emplacamento.',
   },
   {
     id: 'ebike',
     nome: 'E-bikes',
-    nota: 'Bicicletas elétricas. A classificação legal de cada uma depende da potência do motor e é confirmada pelo consultor antes da compra.',
+    nota: 'Até 32 km/h e 1000 W de fábrica. Sem CNH, sem emplacamento, sem IPVA. O argumento vem antes do modelo.',
   },
   {
     id: 'triciclo',
     nome: 'Triciclos',
-    nota: 'Triciclos: estabilidade e carga. Público sênior e uso comercial de bairro.',
+    nota: 'Maior estabilidade, pode ser autopropelido ou ciclomotor, consulte nossos modelos.',
   },
   {
     id: 'patinete',
@@ -115,7 +115,12 @@ const COR = {
      sombra). E o unico jeito honesto: escolher "no olho" foi o que deixou o
      azul cadastrado como ciano claro com a moto sendo azul marinho. */
   grafite: { nome: 'Grafite', hex: '#363C40' },
-  dourado: { nome: 'Dourado', hex: '#AB9A85' },
+
+  /* Pintura de DOIS tons: chassi escuro e para-lamas dourados. O swatch usa
+     `bicolor`, com divisao dura a 50%, porque e assim que a lataria sai da
+     fabrica; degrade suave mentiria sobre o produto. Os dois hex foram
+     amostrados na propria foto, cada um na regiao dele. */
+  pretodourado: { nome: 'Preto e dourado', bicolor: ['#24272A', '#A3947F'] },
 
   /* Cor de arte, nao de pintura chapada: o swatch e a bandeira. O `hex` fica
      como reserva, para o caso do SVG nao carregar. */
@@ -203,6 +208,21 @@ function voe(slug, nome, dados) {
     preco: null,
   };
 }
+
+/* Ordem da vitrine, definida pela loja: os campeões de venda primeiro.
+   É uma lista de PRIORIDADE, não a lista completa. Quem não estiver aqui
+   aparece depois, na ordem em que está no catálogo, então esquecer um modelo
+   novo nesta lista não o some do site: só não o promove.
+
+   Mexer aqui é a forma certa de reordenar a vitrine. Reordenar os blocos de
+   modelo abaixo funcionaria igual, mas transforma qualquer troca de posição
+   num diff de centenas de linhas. */
+window.URBANA_ORDEM = [
+  'voe-raptor', 'voe-titan', 'voe-x11-mini', 'voe-eco',
+  'voe-susan', 'evon-bravus', 'evon-nimbus', 'evon-pulse',
+  'voe-dot', 'voe-lux', 'voe-fantom', 'voe-calebito',
+  'voe-x-infinity', 'voe-x11',
+];
 
 window.URBANA_MODELOS = [
   /* ── Evon ──────────────────────────────────────────────────────────── */
@@ -478,9 +498,13 @@ window.URBANA_MODELOS = [
       /* `detalhe: true` = a foto sobrevive a troca de cor. Vale para
          acabamento e componente, nao para o veiculo inteiro: as tres de cima
          mostram a moto branca, preta e preta-dourada, e mante-las ao lado de
-         uma vermelha selecionada confundiria em vez de informar. */
-      { src: 'assets/img/models/voe-x11-4.webp', alt: 'Chave na ignição da Voe X11', recorte: false, detalhe: true },
-      { src: 'assets/img/models/voe-x11-5.webp', alt: 'Banco e suspensão traseira da Voe X11', recorte: false, detalhe: true },
+         uma vermelha selecionada confundiria em vez de informar.
+
+         Estas tres substituem as duas antigas (voe-x11-4 e -5): sao do mesmo
+         acabamento, feitas na rua e em resolucao melhor. */
+      { src: 'assets/img/models/voe-x11-detalhe-1.webp', alt: 'Farol dianteiro da Voe X11, com a moto estacionada na orla', recorte: false, detalhe: true },
+      { src: 'assets/img/models/voe-x11-detalhe-2.webp', alt: 'Chave na ignição da Voe X11', recorte: false, detalhe: true },
+      { src: 'assets/img/models/voe-x11-detalhe-3.webp', alt: 'Bateria e suspensão traseira da Voe X11', recorte: false, detalhe: true },
     ],
     /* O catálogo impresso lista duas versões de motor (2000 W e 3000 W) e
        70 km/h. O cliente confirmou 3000 W como a versão padrão da loja.
@@ -510,9 +534,10 @@ window.URBANA_MODELOS = [
       'Painel, faróis e setas em LED', 'Compartimento extra para bateria',
       'Roda de liga leve aro 10 ou 12', 'Buzina',
     ],
-    /* Oito cores, cinco com foto propria. Branco, cinza e azul continuam na
-       lista sem galeria: ao serem clicadas caem na galeria padrao do modelo,
-       que e o comportamento de fotosDaCorAtiva no app.js.
+    /* Seis cores, cinco com foto propria. Cinza e azul sairam da lista: a loja
+       deixou de trabalhar com elas. So o branco continua sem galeria propria,
+       e ao ser clicado cai na galeria padrao do modelo, que e o comportamento
+       de fotosDaCorAtiva no app.js.
 
        Preto e Grafite sao pinturas quase identicas na amostra (#383F47 contra
        #363C40); a diferenca visivel nas fotos e o banco, marrom num e preto no
@@ -529,15 +554,16 @@ window.URBANA_MODELOS = [
         { src: 'assets/img/models/voe-x11-cor-grafite.webp', recorte: false, inteira: true,
           alt: 'Voe X11 grafite de perfil, com banco preto e apoio de costas' },
       ] },
-      COR.cinza,
-      COR.azul,
       { ...COR.vermelho, galeria: [
         { src: 'assets/img/models/voe-x11-cor-vermelho.webp', recorte: false, inteira: true,
           alt: 'Voe X11 vermelha em tres quartos frontal, com para-lamas e chassi na cor' },
       ] },
-      { ...COR.dourado, galeria: [
-        { src: 'assets/img/models/voe-x11-cor-dourado.webp', recorte: false, inteira: true,
-          alt: 'Voe X11 dourada em tres quartos frontal, com para-lamas em tom champanhe' },
+      /* Era "Dourado" com hex chapado. A foto mostra que a pintura tem DOIS
+         tons: chassi escuro e para-lamas dourados. Virou COR.pretodourado,
+         com swatch `bicolor`, que e o caso para o qual ele foi feito. */
+      { ...COR.pretodourado, galeria: [
+        { src: 'assets/img/models/voe-x11-cor-pretodourado.webp', recorte: false, inteira: true,
+          alt: 'Voe X11 preta com para-lamas dourados, em tres quartos frontal' },
       ] },
       { ...COR.reinounido, galeria: [
         { src: 'assets/img/models/voe-x11-cor-reinounido.webp', recorte: false, inteira: true,
@@ -626,7 +652,34 @@ window.URBANA_MODELOS = [
       'Carregador bivolt', 'Painel, faróis e setas em LED',
       'Quadro em aço de carbono', 'Cesta embutida', 'Bateria removível',
     ],
-    cores: cores('branco', 'preto', 'vermelho', 'azul'),
+    galeria: [
+      { src: 'assets/img/models/voe-pop-1.webp', alt: 'Bicicleta elétrica Voe Pop vermelha, recorte sem fundo' },
+      { src: 'assets/img/models/voe-pop-detalhe-1.webp', alt: 'Guidão do Voe Pop com suporte de celular e painel digital', recorte: false, detalhe: true },
+      { src: 'assets/img/models/voe-pop-detalhe-2.webp', alt: 'Painel digital do Voe Pop em detalhe', recorte: false, detalhe: true },
+      { src: 'assets/img/models/voe-pop-detalhe-3.webp', alt: 'Roda traseira e motor do Voe Pop em detalhe', recorte: false, detalhe: true },
+    ],
+    cores: [
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-pop-cor-branco.webp', alt: 'Voe Pop branca de perfil, com cesta dianteira e bagageiro', recorte: false, inteira: true },
+      ] },
+      /* ⚠ A foto que a loja nomeou "preto" mostra um quadro CINZA: amostrada,
+         a lataria dá #79828B, contra #43484C da grafite do X11. O swatch preto
+         ao lado dela vai parecer errado. Confirmar como a loja vende essa
+         pintura antes de publicar. */
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-pop-cor-preto.webp', alt: 'Voe Pop cinza de perfil, com cesta dianteira e bagageiro', recorte: false, inteira: true },
+      ] },
+      { ...COR.vermelho, galeria: [
+        { src: 'assets/img/models/voe-pop-cor-vermelho.webp', alt: 'Voe Pop vermelha de perfil, com cesta dianteira e bagageiro', recorte: false, inteira: true },
+      ] },
+      /* Azul PROPRIO da Pop, e nao o COR.azul da paleta. O compartilhado e um
+         ciano claro (#5CE1E6) que nao existe em moto nenhuma; aqui ele ficava
+         ao lado de uma bicicleta azul forte e parecia erro. Os outros quatro
+         modelos que usam COR.azul seguem com o ciano ate termos foto deles. */
+      { ...COR.azul, hex: '#004CB6', galeria: [
+        { src: 'assets/img/models/voe-pop-cor-azul.webp', alt: 'Voe Pop azul de perfil, com cesta dianteira e bagageiro', recorte: false, inteira: true },
+      ] },
+    ],
   }),
 
   /* ── Voe · patinetes e lazer ───────────────────────────────────────────
@@ -660,11 +713,21 @@ window.URBANA_MODELOS = [
     equipamentos: ['Carregador bivolt', 'Guidão regulável', 'Banco regulável', 'LED lateral'],
     cores: cores('preto'),
   }),
-  voe('c5', 'C5', {
+  voe('g5', 'G5', {
     categoria: 'patinete',
     classificacao: null,
     descritivo: 'Patinete elétrico',
-    alt: 'Patinete elétrico Voe C5 preto com banco e bagageiro, recorte sem fundo',
+    alt: 'Patinete elétrico Voe G5 preto com banco e bagageiro, recorte sem fundo',
+    galeria: [
+      { src: 'assets/img/models/voe-g5-1.webp', alt: 'Patinete elétrico Voe G5 preto com banco e bagageiro, recorte sem fundo' },
+      /* Nomeadas como detalhe pela loja. A primeira mostra o veículo inteiro, o
+         que normalmente não deveria sobreviver à troca de cor; aqui pode,
+         porque o G5 tem uma cor só e não há outra pintura para conflitar. */
+      { src: 'assets/img/models/voe-g5-detalhe-1.webp', alt: 'Voe G5 visto de frente, com guidão e faróis', recorte: false, inteira: true, detalhe: true },
+      { src: 'assets/img/models/voe-g5-detalhe-2.webp', alt: 'Painel digital do Voe G5 com a chave na ignição', recorte: false, inteira: true, detalhe: true },
+      { src: 'assets/img/models/voe-g5-detalhe-3.webp', alt: 'Punho do acelerador e painel do Voe G5 em detalhe', recorte: false, inteira: true, detalhe: true },
+      { src: 'assets/img/models/voe-g5-detalhe-4.webp', alt: 'Roda traseira e motor do Voe G5 em detalhe', recorte: false, inteira: true, detalhe: true },
+    ],
     specs: {
       velocidade: { valor: 32, unidade: 'km/h' },
       potencia: { valor: 500, unidade: 'W' },
@@ -680,7 +743,12 @@ window.URBANA_MODELOS = [
       'Bolsa para pertences', 'Setas', 'Painel digital',
       'Farol de LED e iluminação completa', 'Chave reserva', 'Buzina',
     ],
-    cores: cores('preto'),
+    cores: [
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-g5-cor-preto.webp', alt: 'Patinete Voe G5 preto em três quartos, sobre fundo escuro', recorte: false, inteira: true, fundo: '#000000' },
+        { src: 'assets/img/models/voe-g5-cor-preto-2.webp', alt: 'Voe G5 preto de perfil, com banco e bagageiro traseiro', recorte: false, inteira: true },
+      ] },
+    ],
   }),
   voe('drift', 'Drift', {
     categoria: 'patinete',
@@ -727,8 +795,12 @@ window.URBANA_FAQ = [
     a: 'Uma recarga completa de um autopropelido fica entre R$ 0,80 e R$ 2,00, dependendo da tarifa da sua região. Na loja fazemos a conta com a sua rota real antes da compra.',
   },
   {
+    q: 'A moto elétrica sobe ladeira?',
+    a: 'Sim, a performance de subida pode variar de acordo com a potência do motor e o peso suportado pelo modelo.',
+  },
+  {
     q: 'A bateria é removível?',
-    a: 'Em boa parte dos modelos, sim, o que permite carregar em apartamento ou no trabalho. A ficha técnica de cada modelo informa se a bateria é removível ou fixa.',
+    a: 'Sim, o que permite carregar em apartamento ou no trabalho. A ficha técnica de cada modelo traz a especificação da bateria.',
   },
   {
     q: 'Vocês têm assistência técnica própria?',
@@ -736,7 +808,7 @@ window.URBANA_FAQ = [
   },
   {
     q: 'Dá para andar com garupa?',
-    a: 'Depende do modelo e da classificação. Autopropelidos são de uso individual. Ciclomotores e motos elétricas homologados para dois ocupantes trazem essa informação na ficha técnica, e é um dos campos que conferimos junto com você.',
+    a: 'Pode levar até 1 passageiro desde que o modelo tenha estrutura para isso. A ficha técnica traz a carga máxima suportada, e é um dos campos que conferimos junto com você.',
   },
   {
     q: 'Posso fazer um test ride antes de decidir?',
