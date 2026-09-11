@@ -1201,12 +1201,17 @@ body.menu-aberto .header__toggle {
 
 .modal__scrim { position: absolute; inset: 0; background: rgba(26, 0, 55, .55); backdrop-filter: blur(3px); }
 
+/* Altura DEFINIDA, e nao so `max-height`. Com teto apenas, o Safari (Mac e
+   iPad deitado) nao limitava a linha do grid: o painel crescia alem da caixa,
+   o `overflow` cortava, e o botao do WhatsApp e as cores sumiam. O Chrome
+   respeitava o teto, por isso passou despercebido. */
 .modal__caixa {
   position: relative;
   width: min(1080px, 100%);
-  max-height: min(90vh, 820px);
+  height: min(90vh, 820px);
   display: grid;
   grid-template-columns: 1.15fr .85fr;
+  grid-template-rows: minmax(0, 1fr);
   background: var(--urb-branco);
   border-radius: var(--urb-r-card);
   overflow: hidden;
@@ -1521,13 +1526,20 @@ body.menu-aberto .header__toggle {
     border-radius: 0;
   }
   /* Altura pela proporcao das fotos (4:3), e nao por uma fatia fixa da tela:
-     a foto ocupa a largura toda sem sobrar nem cortar. O teto vale para a
-     area inteira, miniaturas incluidas, e so age em celular baixo, onde 4:3
-     da largura espremeria a ficha entre a foto e o botao. */
-  .modal__galeria { height: auto; max-height: 44dvh; }
-  /* `stretch` explicito: item de grid com aspect-ratio nao estica por padrao,
-     e sem isso o teto encolhia a area mas nao o slider, que vazava por cima. */
-  .modal__slider { aspect-ratio: 4 / 3; align-self: stretch; }
+     75vw e 4:3 da largura, que no celular e a largura do modal. O teto de 44%
+     da tela vale para a area inteira e so age em tela baixa: com miniaturas,
+     desconta a fileira delas (60 px).
+
+     Altura EXPLICITA, e nao `aspect-ratio`: o Safari nao usa o aspect-ratio
+     do slider para dimensionar a trilha `1fr` da galeria, e a foto sumia no
+     iPhone e no iPad (area com 0 px). O Chrome aceitava, por isso passou.
+     `vh` antes de `dvh`: iOS anterior ao 15.4 ignora a linha com dvh. */
+  .modal__galeria { height: auto; }
+  .modal__slider { height: min(75vw, 44vh); height: min(75vw, 44dvh); }
+  .modal__galeria.tem-miniaturas .modal__slider {
+    height: min(75vw, calc(44vh - 60px));
+    height: min(75vw, calc(44dvh - 60px));
+  }
   .modal__miniaturas { padding: var(--urb-8) var(--urb-12); }
   .modal__mini { width: 58px; }
   .modal__titulo { font-size: 28px; }

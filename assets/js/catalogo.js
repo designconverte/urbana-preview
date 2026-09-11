@@ -15,8 +15,6 @@
    · Bravus: ficha recebida. A lista de equipamentos NÃO vem nela, foi herdada
      da linha Evon: confirmar com a loja se ele tem mesmo marcha ré, NFC e
      alarme antes de publicar. O tom do Cinza Zenith também é aproximado.
-   · Voe Susan: o catálogo escreve "VEREFICAR CORES" no lugar dos swatches,
-     então fica sem cores até a confirmação. (As da Lux a loja confirmou.)
    · Voe Chopper: removido do site a pedido do cliente. Está no catálogo do
      fabricante, mas fora da vitrine.
    · Voe MC20 Mini aparece no índice do catálogo mas não tem página.
@@ -134,6 +132,12 @@ const COR = {
      o bege na lataria, e o preto e o vermelho cada um na sua regiao. */
   bege: { nome: 'Bege', hex: '#D5CBAF' },
   pretovermelho: { nome: 'Preto e vermelho', bicolor: ['#171A1A', '#C72422'] },
+
+  /* Susan, amostrados nas fotos. O vinho vem da lataria ILUMINADA: na sombra
+     ele cai para quase preto e a bolinha se confundiria com a do preto. O bege
+     dos dois tons e o bege puro sao a mesma pintura, com o mesmo hex. */
+  vinhobege: { nome: 'Vinho e bege', bicolor: ['#58222C', '#DBD6C7'] },
+  pretobege: { nome: 'Preto e bege', bicolor: ['#101011', '#DBD6C7'] },
 };
 
 const cores = (...chaves) => chaves.map((k) => COR[k]);
@@ -465,7 +469,22 @@ window.URBANA_MODELOS = [
       ocupantes: 'Até 180 kg',
     },
     equipamentos: [...VOE_EQUIP_BASE, 'Baú', 'Retrovisores'],
-    cores: null, // catálogo escreve "VEREFICAR CORES"
+    /* Cores confirmadas pela loja. As fotos são de estúdio, com fundo cinza:
+       no modal cabem inteiras, e a área vazia leva o cinza da própria foto.
+       O card segue com o recorte do catálogo, que é a mesma pintura vinho e
+       bege: foto com fundo viraria um retângulo cinza numa vitrine de
+       recortes. Por isso vinho e bege vem primeiro, o modal abre nela. */
+    cores: [
+      { ...COR.vinhobege, galeria: [
+        { src: 'assets/img/models/voe-susan-cor-vinhobege.webp', alt: 'Voe Susan vinho e bege, retrô, com baú vinho, em três quartos frontal', recorte: false, inteira: true, fundo: '#E5E7EA' },
+      ] },
+      { ...COR.pretobege, galeria: [
+        { src: 'assets/img/models/voe-susan-cor-pretobege.webp', alt: 'Voe Susan preta e bege, retrô, com baú preto, em três quartos frontal', recorte: false, inteira: true, fundo: '#E0E2E3' },
+      ] },
+      { ...COR.bege, hex: '#DBD6C7', galeria: [
+        { src: 'assets/img/models/voe-susan-cor-bege.webp', alt: 'Voe Susan toda bege, retrô, com baú preto e bege, em três quartos frontal', recorte: false, inteira: true, fundo: '#DDDDDD' },
+      ] },
+    ],
   }),
   voe('titan', 'Titan', {
     categoria: 'autopropelido',
@@ -521,6 +540,7 @@ window.URBANA_MODELOS = [
   voe('x11-mini', 'X11 Mini', {
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
+    foto: 'assets/img/models/voe-x11-mini-cor-vermelho.webp',
     alt: 'Scooter elétrica Voe X11 Mini vermelha e preta de pneus largos, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
@@ -534,7 +554,27 @@ window.URBANA_MODELOS = [
       'Carregador bivolt', 'Tecnologia NFC', 'Painel, faróis e setas em LED',
       'Quadro em aço de carbono', 'Bateria removível',
     ],
-    cores: cores('branco', 'preto', 'cinza', 'vermelho', 'azul'),
+    /* Vermelha primeiro: era a cor da foto principal e continua sendo. O que
+       muda de cor são os para-lamas, e o hex de azul e grafite foi amostrado
+       neles: o COR.azul é ciano claro, e o grafite desta pintura é mais quente
+       e mais claro que o do X11. Grafite entrou no lugar do cinza. */
+    cores: [
+      { ...COR.vermelho, galeria: [
+        { src: 'assets/img/models/voe-x11-mini-cor-vermelho.webp', alt: 'Voe X11 Mini com para-lamas vermelhos e banco preto, em três quartos frontal' },
+      ] },
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-x11-mini-cor-branco.webp', alt: 'Voe X11 Mini com para-lamas brancos e banco caramelo, em três quartos frontal' },
+      ] },
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-x11-mini-cor-preto.webp', alt: 'Voe X11 Mini preta com banco preto, em três quartos frontal' },
+      ] },
+      { ...COR.grafite, hex: '#6C6162', galeria: [
+        { src: 'assets/img/models/voe-x11-mini-cor-grafite.webp', alt: 'Voe X11 Mini com para-lamas grafite e banco caramelo, em três quartos frontal' },
+      ] },
+      { ...COR.azul, hex: '#0022F3', galeria: [
+        { src: 'assets/img/models/voe-x11-mini-cor-azul.webp', alt: 'Voe X11 Mini com para-lamas azuis e banco caramelo, em três quartos frontal' },
+      ] },
+    ],
   }),
 
   /* ── Voe · ciclomotores ────────────────────────────────────────────── */
