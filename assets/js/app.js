@@ -764,11 +764,10 @@
         .map(([chave, rotulo]) => {
           const bruto = m.specs[chave];
           const valor = typeof bruto === 'object' ? `${bruto.valor} ${bruto.unidade}` : bruto;
-          /* Numero com condicao carrega a condicao NA MESMA LINHA. Autonomia
-             "media" e autonomia "maxima" sao promessas diferentes, e mostradas
-             como numero puro parecem comparaveis: quem olha 50 km do Bravus ao
-             lado de 40 km do X11 nao tem como saber que um e tipico e o outro
-             e melhor caso. Rodape com asterisco nao resolve, porque ninguem
+          /* Numero com condicao carrega a condicao NA MESMA LINHA. Os 100 km
+             do Eco sao com 2 baterias e os 45 km do X11 sao melhor caso:
+             mostrados como numero puro, parecem comparaveis com os dos outros
+             modelos. Rodape com asterisco nao resolve, porque ninguem
              associa de volta. */
           const nota = typeof bruto === 'object' && bruto.nota
             ? `<small class="ficha__nota">${escapar(bruto.nota)}</small>`

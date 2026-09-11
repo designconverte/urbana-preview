@@ -253,10 +253,10 @@ window.URBANA_MODELOS = [
          linha: repetir os números deles daria um dado errado com cara de certo. */
     specs: (() => {
       const { dimensoes, ...base } = EVON_COMUM;
-      // A ficha do Bravus diz autonomia MEDIA, nao maxima.
+      // 55 km confirmado pela loja; substitui a autonomia media da ficha.
       return {
         ...base,
-        autonomia: { valor: 50, unidade: 'km', nota: 'Autonomia média informada pelo fabricante.' },
+        autonomia: { valor: 55, unidade: 'km' },
         recarga: '4 h',
       };
     })(),
@@ -281,7 +281,7 @@ window.URBANA_MODELOS = [
       { src: 'assets/img/models/nimbus-3.webp', alt: 'Evon Nimbus grafite vista de frente' },
       { src: 'assets/img/models/nimbus-4.webp', alt: 'Lanterna traseira em LED da Evon Nimbus', recorte: false },
     ],
-    specs: { ...EVON_COMUM, autonomia: { valor: 60, unidade: 'km' }, bateria: 'Lítio 72V 20Ah' },
+    specs: { ...EVON_COMUM, autonomia: { valor: 50, unidade: 'km' }, bateria: 'Lítio 72V 20Ah' },
     equipamentos: EVON_EQUIPAMENTOS,
     cores: CORES_EVON,
     preco: null,
@@ -304,7 +304,7 @@ window.URBANA_MODELOS = [
       { src: 'assets/img/models/pulse-4.webp', alt: 'Evon Pulse prata vista de frente' },
     ],
     // O baú EXTERNO da Pulse é acessório vendido à parte (nota da ficha).
-    specs: { ...EVON_COMUM, autonomia: { valor: 50, unidade: 'km' }, bateria: 'Lítio 60V 20Ah' },
+    specs: { ...EVON_COMUM, autonomia: { valor: 45, unidade: 'km' }, bateria: 'Lítio 60V 20Ah' },
     equipamentos: EVON_EQUIPAMENTOS,
     cores: CORES_EVON,
     preco: null,
@@ -384,7 +384,7 @@ window.URBANA_MODELOS = [
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
-      autonomia: { valor: 70, unidade: 'km' },
+      autonomia: { valor: 60, unidade: 'km' },
       bateria: 'Lítio ferro fosfato 60V 25Ah, removível com alça',
       recarga: '5 h',
       freios: 'Hidráulico a disco dianteiro e traseiro',
@@ -435,7 +435,7 @@ window.URBANA_MODELOS = [
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
-      autonomia: { valor: 65, unidade: 'km' },
+      autonomia: { valor: 70, unidade: 'km' },
       bateria: 'Lítio ferro fosfato 60V 30Ah, removível com alça',
       recarga: '5 h',
       freios: 'Hidráulico a disco dianteiro e traseiro',
@@ -521,9 +521,9 @@ window.URBANA_MODELOS = [
       classificacao: 'Ciclomotor · exige registro e habilitação',
       velocidade: { valor: 50, unidade: 'km/h' },
       potencia: { valor: 3000, unidade: 'W' },
-      // O cliente corrigiu para 40 km MAXIMOS: e numero de melhor caso, e a
+      // O cliente corrigiu para 45 km MAXIMOS: e numero de melhor caso, e a
       // ficha diz isso em vez de deixar parecer comparavel com uma media.
-      autonomia: { valor: 40, unidade: 'km', nota: 'Autonomia máxima; varia com peso, relevo e modo de condução.' },
+      autonomia: { valor: 45, unidade: 'km', nota: 'Autonomia máxima; varia com peso, relevo e modo de condução.' },
       recarga: '6 h',
       protecao: 'IP65',
       ocupantes: 'Até 200 kg',
@@ -621,7 +621,7 @@ window.URBANA_MODELOS = [
     specs: {
       velocidade: { valor: 32, unidade: 'km/h' },
       potencia: { valor: 1000, unidade: 'W' },
-      autonomia: { valor: 60, unidade: 'km' },
+      autonomia: { valor: 100, unidade: 'km', nota: 'Com 2 baterias.' },
       bateria: '1 ou 2 baterias de lítio 48V 15.6Ah, removível',
       recarga: '5 h',
       ocupantes: 'Até 150 kg',
