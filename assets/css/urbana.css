@@ -1238,6 +1238,11 @@ body.menu-aberto .header__toggle {
   flex: 0 0 100%;
   scroll-snap-align: center;
   display: grid;
+  /* Trilha presa a altura do slide. Na trilha `auto` do padrao, o
+     `height: 100%` da foto se resolvia contra o proprio conteudo: a foto
+     crescia na proporcao natural, passava do quadro e o `overflow` cortava
+     as rodas (medido no celular: foto de 314 px num quadro de 277). */
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   place-items: center;
   min-width: 0;
   overflow: hidden;
@@ -1290,6 +1295,7 @@ body.menu-aberto .header__toggle {
   overflow-x: auto;
   scrollbar-width: thin;
 }
+.modal__miniaturas[hidden] { display: none; }
 .modal__mini {
   flex: none;
   width: 74px;
@@ -1514,7 +1520,16 @@ body.menu-aberto .header__toggle {
     height: 100dvh;
     border-radius: 0;
   }
-  .modal__galeria { height: 40dvh; }
+  /* Altura pela proporcao das fotos (4:3), e nao por uma fatia fixa da tela:
+     a foto ocupa a largura toda sem sobrar nem cortar. O teto vale para a
+     area inteira, miniaturas incluidas, e so age em celular baixo, onde 4:3
+     da largura espremeria a ficha entre a foto e o botao. */
+  .modal__galeria { height: auto; max-height: 44dvh; }
+  /* `stretch` explicito: item de grid com aspect-ratio nao estica por padrao,
+     e sem isso o teto encolhia a area mas nao o slider, que vazava por cima. */
+  .modal__slider { aspect-ratio: 4 / 3; align-self: stretch; }
+  .modal__miniaturas { padding: var(--urb-8) var(--urb-12); }
+  .modal__mini { width: 58px; }
   .modal__titulo { font-size: 28px; }
   .modal__topo { padding: var(--urb-24) var(--urb-24) var(--urb-12); }
   .modal__corpo { padding: 0 var(--urb-24) var(--urb-16); }

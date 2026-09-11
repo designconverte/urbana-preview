@@ -641,6 +641,8 @@
           </div>`;
       }).join('');
 
+      // Com uma foto só não há o que escolher, e a fileira roubaria altura da foto.
+      $('#modal-miniaturas').hidden = fotos.length < 2;
       $('#modal-miniaturas').innerHTML = fotos.map((f, k) => `
         <button class="modal__mini" type="button" data-foto="${k}" aria-current="${k === i}"
                 aria-label="Ver foto ${k + 1} de ${fotos.length}">

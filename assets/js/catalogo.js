@@ -15,8 +15,8 @@
    · Bravus: ficha recebida. A lista de equipamentos NÃO vem nela, foi herdada
      da linha Evon: confirmar com a loja se ele tem mesmo marcha ré, NFC e
      alarme antes de publicar. O tom do Cinza Zenith também é aproximado.
-   · Voe Lux e Voe Susan: o catálogo escreve "VEREFICAR CORES" no lugar dos
-     swatches, então ficam sem cores até a confirmação.
+   · Voe Susan: o catálogo escreve "VEREFICAR CORES" no lugar dos swatches,
+     então fica sem cores até a confirmação. (As da Lux a loja confirmou.)
    · Voe Chopper: removido do site a pedido do cliente. Está no catálogo do
      fabricante, mas fora da vitrine.
    · Voe MC20 Mini aparece no índice do catálogo mas não tem página.
@@ -129,6 +129,11 @@ const COR = {
     hex: '#1B3053',
     imagem: 'assets/img/swatches/reino-unido.svg',
   },
+
+  /* Entraram com as fotos novas da Lux, com hex amostrado na propria foto:
+     o bege na lataria, e o preto e o vermelho cada um na sua regiao. */
+  bege: { nome: 'Bege', hex: '#D5CBAF' },
+  pretovermelho: { nome: 'Preto e vermelho', bicolor: ['#171A1A', '#C72422'] },
 };
 
 const cores = (...chaves) => chaves.map((k) => COR[k]);
@@ -196,12 +201,14 @@ function voe(slug, nome, dados) {
     categoria: dados.categoria,
     classificacao: dados.classificacao,
     chamada: null, // o catálogo do fabricante não traz texto de venda por modelo
-    foto: `assets/img/models/voe-${slug}-card.webp`,
+    /* `foto` própria quando a principal vem das fotos por cor: o card usa o
+       mesmo arquivo da galeria, e o modal abre com a imagem já em cache. */
+    foto: dados.foto || `assets/img/models/voe-${slug}-card.webp`,
     recorte: true,
     alt: dados.alt,
     // Um slide só por padrão (o catálogo traz uma foto). Modelos com material
     // extra do cliente passam `galeria` própria e sobrescrevem isso.
-    galeria: dados.galeria || [{ src: `assets/img/models/voe-${slug}-1.webp`, alt: dados.alt }],
+    galeria: dados.galeria || [{ src: dados.foto || `assets/img/models/voe-${slug}-1.webp`, alt: dados.alt }],
     specs: dados.specs,
     equipamentos: dados.equipamentos,
     cores: dados.cores || null,
@@ -360,6 +367,7 @@ window.URBANA_MODELOS = [
   voe('lux', 'Lux', {
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
+    foto: 'assets/img/models/voe-lux-cor-pretovermelho.webp',
     alt: 'Scooter elétrica Voe Lux preta e vermelha com baú, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
@@ -375,12 +383,27 @@ window.URBANA_MODELOS = [
       ...VOE_EQUIP_BASE, 'Marcha ré', 'Modo parking', 'Banco com espaço para garupa',
       'Baú', 'Chaves reserva', 'Roda dianteira de liga aro 10',
     ],
-    cores: null, // catálogo escreve "VEREFICAR CORES"
+    // Cores confirmadas pela loja. Preto e vermelho primeiro: é a foto principal.
+    cores: [
+      { ...COR.pretovermelho, galeria: [
+        { src: 'assets/img/models/voe-lux-cor-pretovermelho.webp', alt: 'Voe Lux preta com detalhes vermelhos e baú, de perfil' },
+      ] },
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-lux-cor-branco.webp', alt: 'Voe Lux branca com base preta e baú, de perfil' },
+      ] },
+      { ...COR.bege, galeria: [
+        { src: 'assets/img/models/voe-lux-cor-bege.webp', alt: 'Voe Lux bege com base preta e baú, de perfil' },
+      ] },
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-lux-cor-preto.webp', alt: 'Voe Lux preta com baú, de perfil' },
+      ] },
+    ],
   }),
   voe('raptor', 'Raptor', {
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
-    alt: 'Scooter elétrica Voe Raptor vermelha com baú, recorte sem fundo',
+    foto: 'assets/img/models/voe-raptor-cor-branco.webp',
+    alt: 'Scooter elétrica Voe Raptor branca com baú, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
@@ -395,7 +418,23 @@ window.URBANA_MODELOS = [
       'Baú', 'Botão de alerta', 'Chaves reserva', 'Bloqueio na roda traseira',
       'Roda dianteira de liga aro 12',
     ],
-    cores: cores('vermelho', 'branco', 'preto', 'cinza'),
+    /* A primeira cor é a da foto principal: o modal abre nela, e card e modal
+       precisam mostrar a mesma moto. */
+    cores: [
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-raptor-cor-branco.webp', alt: 'Voe Raptor branca com grafismo preto e baú, em três quartos frontal' },
+      ] },
+      { ...COR.vermelho, galeria: [
+        { src: 'assets/img/models/voe-raptor-cor-vermelho.webp', alt: 'Voe Raptor vermelha com baú, em três quartos frontal' },
+      ] },
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-raptor-cor-preto.webp', alt: 'Voe Raptor preta com grafismo branco e baú, em três quartos frontal' },
+      ] },
+      // COR.cinza é escuro (#575757); esta lataria é prata azulada, amostrada na foto.
+      { ...COR.cinza, hex: '#B1B4BD', galeria: [
+        { src: 'assets/img/models/voe-raptor-cor-cinza.webp', alt: 'Voe Raptor cinza clara com grafismo branco e baú, em três quartos frontal' },
+      ] },
+    ],
   }),
   voe('sol', 'Sol', {
     categoria: 'autopropelido',
@@ -431,7 +470,8 @@ window.URBANA_MODELOS = [
   voe('titan', 'Titan', {
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
-    alt: 'Scooter elétrica Voe Titan branca e preta com baú, recorte sem fundo',
+    foto: 'assets/img/models/voe-titan-cor-branco.webp',
+    alt: 'Scooter elétrica Voe Titan branca com farol duplo e baú, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
@@ -445,7 +485,19 @@ window.URBANA_MODELOS = [
       ...VOE_EQUIP_BASE, 'Marcha ré', 'Modo parking', 'Banco com espaço para garupa',
       'Baú de 27 litros', 'Chaves reserva', 'Roda dianteira de liga aro 12',
     ],
-    cores: cores('vermelho', 'branco', 'preto', 'cinza'),
+    // Sem vermelha: a loja não trabalha com essa cor da Titan.
+    cores: [
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-titan-cor-branco.webp', alt: 'Voe Titan branca com farol duplo e baú, em três quartos frontal' },
+      ] },
+      // COR.cinza é escuro (#575757); esta lataria é cinza clara, amostrada na foto.
+      { ...COR.cinza, hex: '#9A9FA6', galeria: [
+        { src: 'assets/img/models/voe-titan-cor-cinza.webp', alt: 'Voe Titan cinza com farol duplo e baú, em três quartos frontal' },
+      ] },
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-titan-cor-preto.webp', alt: 'Voe Titan preta com farol duplo e baú, em três quartos frontal' },
+      ] },
+    ],
   }),
   voe('x-infinity', 'X-Infinity', {
     categoria: 'autopropelido',
@@ -745,7 +797,7 @@ window.URBANA_MODELOS = [
     ],
     cores: [
       { ...COR.preto, galeria: [
-        { src: 'assets/img/models/voe-g5-cor-preto.webp', alt: 'Patinete Voe G5 preto em três quartos, sobre fundo escuro', recorte: false, inteira: true, fundo: '#000000' },
+        { src: 'assets/img/models/voe-g5-cor-preto.webp', alt: 'Patinete Voe G5 preto em três quartos, com banco e bolsa no guidão' },
         { src: 'assets/img/models/voe-g5-cor-preto-2.webp', alt: 'Voe G5 preto de perfil, com banco e bagageiro traseiro', recorte: false, inteira: true },
       ] },
     ],
