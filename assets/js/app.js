@@ -832,6 +832,10 @@
       // O nome sai da bolinha e vai para o rótulo, mas continua no aria-label:
       // swatch sem nome acessível é botão mudo para quem usa leitor de tela.
       $('#modal-cor-nome').textContent = m.cores[corAtiva].nome;
+      /* Uma cor só não tem o que escolher: fica o rótulo, que informa a cor e
+         entra na mensagem do WhatsApp, e sai a bolinha, que seria um botão
+         sem função. Mesma regra das miniaturas com uma foto só. */
+      $('#modal-swatches').hidden = m.cores.length < 2;
       $('#modal-swatches').innerHTML = m.cores.map((c, i) => `
         <button class="modal__swatch" type="button" data-cor="${i}"
                 aria-pressed="${i === corAtiva}" aria-label="Cor ${escapar(c.nome)}"

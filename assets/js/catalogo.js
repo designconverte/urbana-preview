@@ -14,7 +14,7 @@
    PENDÊNCIAS:
    · Bravus: ficha recebida. A lista de equipamentos NÃO vem nela, foi herdada
      da linha Evon: confirmar com a loja se ele tem mesmo marcha ré, NFC e
-     alarme antes de publicar. O tom do Cinza Zenith também é aproximado.
+     alarme antes de publicar.
    · Voe Chopper: removido do site a pedido do cliente. Está no catálogo do
      fabricante, mas fora da vitrine.
    · Voe MC20 Mini aparece no índice do catálogo mas não tem página.
@@ -150,13 +150,80 @@ const CORES_EVON = [
   { nome: 'Vermelho', hex: '#EC1B24' },
 ];
 
-/* O Bravus tem uma cor a mais que Nimbus e Pulse. Só ele ganha lista própria
-   porque só a ficha dele chegou com os cinco tons; se as outras duas também
-   tiverem o Zenith, é trocar as três por esta lista.
-   ⚠ O tom do Zenith é aproximado: a ficha traz o nome, não o código. */
+/* Linha Evon com foto por cor, nas cinco cores. Cada cor abre numa foto de
+   estúdio do mesmo ângulo, então trocar de cor não muda o enquadramento.
+   A cor das fotos antigas (recortes) vem primeiro e leva junto as vistas
+   que só existem nela; o recorte do mesmo ângulo da foto de estúdio fica de
+   fora. O card segue com o recorte, que é dessa mesma cor.
+   Os cinzas saíram da foto de cada pintura. Só a ficha do Bravus dá nome ao
+   dele (Zenith); nas outras duas fica "Cinza". */
+const evon = (nome) => CORES_EVON.find((c) => c.nome === nome);
+
+// Bravus: as fotos antigas são da branca.
 const CORES_BRAVUS = [
-  ...CORES_EVON,
-  { nome: 'Cinza Zenith', hex: '#53585C' },
+  { ...evon('Branco'), galeria: [
+    { src: 'assets/img/models/evon-bravus-cor-branco.webp', alt: 'Evon Bravus branca em três quartos frontal, com encosto do garupa', recorte: false, inteira: true, fundo: '#FCFCFC' },
+    { src: 'assets/img/models/bravus-2.webp', alt: 'Evon Bravus branca de perfil' },
+    { src: 'assets/img/models/bravus-3.webp', alt: 'Evon Bravus branca em três quartos traseiro, com baú' },
+    { src: 'assets/img/models/bravus-4.webp', alt: 'Evon Bravus branca vista de frente' },
+  ] },
+  { ...evon('Prata'), galeria: [
+    { src: 'assets/img/models/evon-bravus-cor-prata.webp', alt: 'Evon Bravus prata em três quartos frontal, com encosto do garupa', recorte: false, inteira: true, fundo: '#FBFBFB' },
+  ] },
+  { ...evon('Preto'), galeria: [
+    { src: 'assets/img/models/evon-bravus-cor-preto.webp', alt: 'Evon Bravus preta em três quartos frontal, com encosto do garupa', recorte: false, inteira: true, fundo: '#FBFCFC' },
+  ] },
+  { ...evon('Vermelho'), galeria: [
+    { src: 'assets/img/models/evon-bravus-cor-vermelho.webp', alt: 'Evon Bravus vermelha em três quartos frontal, com encosto do garupa', recorte: false, inteira: true, fundo: '#F7F9F9' },
+  ] },
+  { nome: 'Cinza Zenith', hex: '#5C5F66', galeria: [
+    { src: 'assets/img/models/evon-bravus-cor-cinza.webp', alt: 'Evon Bravus cinza Zenith em três quartos frontal, com encosto do garupa', recorte: false, inteira: true, fundo: '#FEFEFE' },
+  ] },
+];
+
+/* Nimbus: as fotos antigas são da cinza. Os arquivos vieram com cinza e
+   prata TROCADOS: o "cinza" é prata clara metálica e o "prata" é cinza
+   escuro com filete dourado. Aqui vale a pintura, como na Bravus e na Pulse. */
+const CORES_NIMBUS = [
+  { nome: 'Cinza', hex: '#6A6B6D', galeria: [
+    { src: 'assets/img/models/evon-nimbus-cor-cinza.webp', alt: 'Evon Nimbus cinza escura com filetes dourados, em três quartos frontal', recorte: false, inteira: true },
+    { src: 'assets/img/models/nimbus-2.webp', alt: 'Evon Nimbus cinza em três quartos traseiro, com baú' },
+    { src: 'assets/img/models/nimbus-3.webp', alt: 'Evon Nimbus cinza vista de frente' },
+  ] },
+  { ...evon('Branco'), galeria: [
+    { src: 'assets/img/models/evon-nimbus-cor-branco.webp', alt: 'Evon Nimbus branca em três quartos frontal, com encosto do garupa', recorte: false, inteira: true },
+  ] },
+  { ...evon('Prata'), galeria: [
+    { src: 'assets/img/models/evon-nimbus-cor-prata.webp', alt: 'Evon Nimbus prata em três quartos frontal, com encosto do garupa', recorte: false, inteira: true },
+  ] },
+  { ...evon('Preto'), galeria: [
+    { src: 'assets/img/models/evon-nimbus-cor-preto.webp', alt: 'Evon Nimbus preta em três quartos frontal, com encosto do garupa', recorte: false, inteira: true },
+  ] },
+  { ...evon('Vermelho'), galeria: [
+    { src: 'assets/img/models/evon-nimbus-cor-vermelho.webp', alt: 'Evon Nimbus vermelha em três quartos frontal, com encosto do garupa', recorte: false, inteira: true },
+  ] },
+];
+
+// Pulse: as fotos antigas são da prata.
+const CORES_PULSE = [
+  { ...evon('Prata'), galeria: [
+    { src: 'assets/img/models/evon-pulse-cor-prata.webp', alt: 'Evon Pulse prata em três quartos frontal, com encosto do garupa', recorte: false, inteira: true },
+    { src: 'assets/img/models/pulse-2.webp', alt: 'Evon Pulse prata em três quartos frontal direito' },
+    { src: 'assets/img/models/pulse-3.webp', alt: 'Evon Pulse prata em três quartos traseiro' },
+    { src: 'assets/img/models/pulse-4.webp', alt: 'Evon Pulse prata vista de frente' },
+  ] },
+  { ...evon('Branco'), galeria: [
+    { src: 'assets/img/models/evon-pulse-cor-branco.webp', alt: 'Evon Pulse branca vista de frente, com encosto do garupa', recorte: false, inteira: true },
+  ] },
+  { ...evon('Preto'), galeria: [
+    { src: 'assets/img/models/evon-pulse-cor-preto.webp', alt: 'Evon Pulse preta em três quartos frontal, com encosto do garupa', recorte: false, inteira: true, fundo: '#FDFDFD' },
+  ] },
+  { ...evon('Vermelho'), galeria: [
+    { src: 'assets/img/models/evon-pulse-cor-vermelho.webp', alt: 'Evon Pulse vermelha em três quartos frontal, com encosto do garupa', recorte: false, inteira: true, fundo: '#FEFEFE' },
+  ] },
+  { nome: 'Cinza', hex: '#62676A', galeria: [
+    { src: 'assets/img/models/evon-pulse-cor-cinza.webp', alt: 'Evon Pulse cinza escura com filetes dourados, em três quartos frontal', recorte: false, inteira: true },
+  ] },
 ];
 
 /* ── Blocos repetidos ─────────────────────────────────────────────────── */
@@ -290,11 +357,11 @@ window.URBANA_MODELOS = [
       { src: 'assets/img/models/nimbus-1.webp', alt: 'Evon Nimbus grafite em três quartos frontal' },
       { src: 'assets/img/models/nimbus-2.webp', alt: 'Evon Nimbus grafite em três quartos traseiro, com baú' },
       { src: 'assets/img/models/nimbus-3.webp', alt: 'Evon Nimbus grafite vista de frente' },
-      { src: 'assets/img/models/nimbus-4.webp', alt: 'Lanterna traseira em LED da Evon Nimbus', recorte: false },
+      { src: 'assets/img/models/nimbus-4.webp', alt: 'Lanterna traseira em LED da Evon Nimbus', recorte: false, detalhe: true },
     ],
     specs: { ...EVON_COMUM, autonomia: { valor: 50, unidade: 'km' }, bateria: 'Lítio 72V 20Ah' },
     equipamentos: EVON_EQUIPAMENTOS,
-    cores: CORES_EVON,
+    cores: CORES_NIMBUS,
     preco: null,
   },
   {
@@ -317,7 +384,7 @@ window.URBANA_MODELOS = [
     // O baú EXTERNO da Pulse é acessório vendido à parte (nota da ficha).
     specs: { ...EVON_COMUM, autonomia: { valor: 45, unidade: 'km' }, bateria: 'Lítio 60V 20Ah' },
     equipamentos: EVON_EQUIPAMENTOS,
-    cores: CORES_EVON,
+    cores: CORES_PULSE,
     preco: null,
   },
 
@@ -724,7 +791,7 @@ window.URBANA_MODELOS = [
       'Display colorido com NFC', 'Banco com espaço para garupa',
       'Case e suporte para celular', 'Bateria removível',
     ],
-    cores: cores('branco', 'preto'),
+    cores: cores('preto'), // a loja não trabalha a branca
   }),
   voe('pop', 'Pop', {
     categoria: 'ebike',

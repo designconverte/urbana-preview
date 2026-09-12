@@ -1422,6 +1422,7 @@ body.menu-aberto .header__toggle {
 .modal__cores-rotulo strong { color: var(--urb-branco); font-weight: 700; }
 
 .modal__swatches { display: flex; flex-wrap: wrap; gap: 10px; margin-left: auto; }
+.modal__swatches[hidden] { display: none; }
 .modal__swatch {
   width: 30px; height: 30px;
   padding: 0;
