@@ -138,6 +138,11 @@ const COR = {
      dos dois tons e o bege puro sao a mesma pintura, com o mesmo hex. */
   vinhobege: { nome: 'Vinho e bege', bicolor: ['#58222C', '#DBD6C7'] },
   pretobege: { nome: 'Preto e bege', bicolor: ['#101011', '#DBD6C7'] },
+
+  /* Pintura com trama de fibra de carbono (X-Infinity). A bolinha é um
+     recorte da trama tirado da própria foto: em hex chapado ela seria um
+     cinza escuro quase igual à bolinha do preto ao lado. */
+  carbono: { nome: 'Carbono', hex: '#3A3A3A', imagem: 'assets/img/swatches/carbono.webp' },
 };
 
 const cores = (...chaves) => chaves.map((k) => COR[k]);
@@ -393,7 +398,8 @@ window.URBANA_MODELOS = [
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
     descritivo: 'Bicicleta elétrica',
-    alt: 'Bicicleta elétrica Voe Calebito preta e branca com cesta, recorte sem fundo',
+    foto: 'assets/img/models/voe-calebito-capa.webp',
+    alt: 'Bicicleta elétrica Voe Calebito branca e preta com cesta, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 500, unidade: 'W' },
@@ -403,12 +409,24 @@ window.URBANA_MODELOS = [
       ocupantes: 'Até 130 kg',
     },
     equipamentos: [...VOE_EQUIP_BASE, 'Travamento de roda traseira', 'Cesta frontal'],
-    cores: cores('branco', 'preto', 'cinza'),
+    /* Capa: a foto branca com o fundo removido (BiRefNet, via rembg; original
+       em MIDIAS/recortes/). Branco primeiro para o modal abrir nessa mesma foto.
+       A loja mandou foto só de branca e preta; o cinza do catálogo antigo saiu,
+       porque sem foto própria o swatch cinza mostraria a moto branca. */
+    cores: [
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-calebito-cor-branco.webp', alt: 'Voe Calebito branca e preta com cesta frontal, de perfil', recorte: false, inteira: true, fundo: '#FCFCFC' },
+      ] },
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-calebito-cor-preto.webp', alt: 'Voe Calebito preta com cesta frontal, de perfil', recorte: false, inteira: true, fundo: '#FDFDFD' },
+      ] },
+    ],
   }),
   voe('dot', 'Dot', {
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
-    alt: 'Scooter elétrica Voe Dot cinza com baú, recorte sem fundo',
+    foto: 'assets/img/models/voe-dot-capa.webp',
+    alt: 'Scooter elétrica Voe Dot preta com faixa laranja, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
@@ -418,12 +436,29 @@ window.URBANA_MODELOS = [
       ocupantes: 'Até 150 kg',
     },
     equipamentos: [...VOE_EQUIP_BASE, 'Travamento de roda traseira', 'Retrovisores'],
-    cores: cores('branco', 'preto', 'cinza'),
+    /* Cores confirmadas pela loja: preta, branca e prata. A capa é a foto
+       preta com o fundo removido (BiRefNet, via rembg; original do recorte em
+       MIDIAS/recortes/): é a que mais vende, segundo a loja. A preta vem
+       primeiro para o modal abrir nessa mesma foto. O "cinza" do catálogo
+       antigo era a prata azulada. O COR.prata da paleta puxa para o rosado
+       (#A7A1A6); o hex aqui saiu da lataria. */
+    cores: [
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-dot-cor-preto.webp', alt: 'Voe Dot preta com faixa laranja, em três quartos frontal', recorte: false, inteira: true, fundo: '#FBFBFB' },
+      ] },
+      { ...COR.prata, hex: '#CFD0D4', galeria: [
+        { src: 'assets/img/models/voe-dot-cor-prata.webp', alt: 'Voe Dot prata com faixa laranja, em três quartos frontal', recorte: false, inteira: true, fundo: '#F9FAFA' },
+      ] },
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-dot-cor-branco.webp', alt: 'Voe Dot branca com faixa laranja, em três quartos frontal', recorte: false, inteira: true, fundo: '#F8F9F9' },
+      ] },
+    ],
   }),
   voe('fantom', 'Fantom', {
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
-    alt: 'Scooter elétrica Voe Fantom branca com baú, recorte sem fundo',
+    foto: 'assets/img/models/voe-fantom-capa.webp',
+    alt: 'Scooter elétrica Voe Fantom branca e preta com baú, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
@@ -433,7 +468,20 @@ window.URBANA_MODELOS = [
       ocupantes: 'Até 150 kg',
     },
     equipamentos: [...VOE_EQUIP_BASE, 'Travamento de roda traseira', 'Retrovisores'],
-    cores: cores('branco', 'preto', 'cinza'),
+    /* Capa: a foto branca com o fundo removido (BiRefNet, via rembg; original
+       em MIDIAS/recortes/). Branco primeiro para o modal abrir nessa mesma
+       foto. O cinza saiu da lataria: o COR.cinza (#575757) é bem mais escuro. */
+    cores: [
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-fantom-cor-branco.webp', alt: 'Voe Fantom branca e preta com baú, de perfil em três quartos', recorte: false, inteira: true, fundo: '#FEFEFE' },
+      ] },
+      { ...COR.cinza, hex: '#919BA3', galeria: [
+        { src: 'assets/img/models/voe-fantom-cor-cinza.webp', alt: 'Voe Fantom cinza e preta com baú, de perfil em três quartos', recorte: false, inteira: true, fundo: '#FEFEFE' },
+      ] },
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-fantom-cor-preto.webp', alt: 'Voe Fantom preta com baú, de perfil em três quartos', recorte: false, inteira: true, fundo: '#FEFEFE' },
+      ] },
+    ],
   }),
   voe('lux', 'Lux', {
     categoria: 'autopropelido',
@@ -511,7 +559,8 @@ window.URBANA_MODELOS = [
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
     descritivo: 'Bicicleta elétrica',
-    alt: 'Bicicleta elétrica Voe Sol preta com cesta e baú, recorte sem fundo',
+    foto: 'assets/img/models/voe-sol-capa.webp',
+    alt: 'Bicicleta elétrica Voe Sol preta com cesta frontal e baú, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
@@ -521,12 +570,28 @@ window.URBANA_MODELOS = [
       ocupantes: 'Até 150 kg',
     },
     equipamentos: [...VOE_EQUIP_BASE, 'Baú de 27 litros', 'Retrovisores', 'Cesta frontal'],
-    cores: cores('branco', 'preto', 'cinza'),
+    /* Cores confirmadas pela loja: preta, branca e prata (o "cinza" do
+       catálogo antigo). A capa é a foto preta com o fundo removido (BiRefNet,
+       via rembg; original em MIDIAS/recortes/), e a preta vem primeiro para o
+       modal abrir nessa mesma foto. A prata usa o tom da lataria: o COR.prata
+       da paleta puxa para o rosado. */
+    cores: [
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-sol-cor-preto.webp', alt: 'Voe Sol preta com cesta frontal e baú, em três quartos frontal', recorte: false, inteira: true, fundo: '#FAFAFC' },
+      ] },
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-sol-cor-branco.webp', alt: 'Voe Sol branca com cesta frontal e baú, em três quartos frontal', recorte: false, inteira: true, fundo: '#FDFDFD' },
+      ] },
+      { ...COR.prata, hex: '#CDCED0', galeria: [
+        { src: 'assets/img/models/voe-sol-cor-prata.webp', alt: 'Voe Sol prata com cesta frontal e baú, em três quartos frontal', recorte: false, inteira: true, fundo: '#FEFEFE' },
+      ] },
+    ],
   }),
   voe('susan', 'Susan', {
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
-    alt: 'Scooter elétrica Voe Susan bordô e creme, desenho retrô, recorte sem fundo',
+    foto: 'assets/img/models/voe-susan-capa.webp',
+    alt: 'Scooter elétrica Voe Susan vinho e bege, desenho retrô, com baú, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
@@ -538,9 +603,10 @@ window.URBANA_MODELOS = [
     equipamentos: [...VOE_EQUIP_BASE, 'Baú', 'Retrovisores'],
     /* Cores confirmadas pela loja. As fotos são de estúdio, com fundo cinza:
        no modal cabem inteiras, e a área vazia leva o cinza da própria foto.
-       O card segue com o recorte do catálogo, que é a mesma pintura vinho e
-       bege: foto com fundo viraria um retângulo cinza numa vitrine de
-       recortes. Por isso vinho e bege vem primeiro, o modal abre nela. */
+       A capa é a MESMA foto vinho e bege, com o fundo removido (BiRefNet, via
+       rembg; original do recorte em MIDIAS/recortes/). Com fundo, ela viraria
+       um retângulo cinza numa vitrine de recortes. Vinho e bege vem primeiro
+       para o modal abrir na foto da capa. */
     cores: [
       { ...COR.vinhobege, galeria: [
         { src: 'assets/img/models/voe-susan-cor-vinhobege.webp', alt: 'Voe Susan vinho e bege, retrô, com baú vinho, em três quartos frontal', recorte: false, inteira: true, fundo: '#E5E7EA' },
@@ -588,7 +654,8 @@ window.URBANA_MODELOS = [
   voe('x-infinity', 'X-Infinity', {
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
-    alt: 'Scooter elétrica Voe X-Infinity preta de pneus largos, recorte sem fundo',
+    foto: 'assets/img/models/voe-x-infinity-capa.webp',
+    alt: 'Scooter elétrica Voe X-Infinity preta com banco caramelo e pneus largos, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
@@ -602,13 +669,34 @@ window.URBANA_MODELOS = [
       ...VOE_EQUIP_BASE, 'Marcha ré', 'Modo parking', 'Banco com espaço para garupa',
       'Botão de alerta', 'Bloqueio na roda traseira', 'Roda dianteira de liga aro 10',
     ],
-    cores: cores('branco', 'preto', 'cinza', 'vermelho', 'azul'),
+    /* Capa: a foto preta com o fundo removido (BiRefNet, via rembg; original
+       em MIDIAS/recortes/). Preta primeiro para o modal abrir nessa mesma
+       foto. Carbono entra no lugar do cinza do catálogo antigo. Vermelho e
+       azul usam o tom da lataria iluminada: os da paleta são um vermelho
+       vivo e um ciano, e esta pintura é vermelho escuro e azul royal. */
+    cores: [
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-x-infinity-cor-preto.webp', alt: 'Voe X-Infinity preta com banco caramelo, em três quartos frontal', recorte: false, inteira: true, fundo: '#FDFDFD' },
+      ] },
+      { ...COR.branco, galeria: [
+        { src: 'assets/img/models/voe-x-infinity-cor-branco.webp', alt: 'Voe X-Infinity branca com banco caramelo, em três quartos frontal', recorte: false, inteira: true, fundo: '#FDFDFD' },
+      ] },
+      { ...COR.carbono, galeria: [
+        { src: 'assets/img/models/voe-x-infinity-cor-carbono.webp', alt: 'Voe X-Infinity com acabamento em fibra de carbono e banco preto, em três quartos frontal', recorte: false, inteira: true, fundo: '#FCFCFC' },
+      ] },
+      { ...COR.vermelho, hex: '#A1040B', galeria: [
+        { src: 'assets/img/models/voe-x-infinity-cor-vermelho.webp', alt: 'Voe X-Infinity vermelha com banco preto, em três quartos frontal', recorte: false, inteira: true, fundo: '#FCFCFC' },
+      ] },
+      { ...COR.azul, hex: '#003AB7', galeria: [
+        { src: 'assets/img/models/voe-x-infinity-cor-azul.webp', alt: 'Voe X-Infinity azul com banco preto, em três quartos frontal', recorte: false, inteira: true, fundo: '#FDFDFD' },
+      ] },
+    ],
   }),
   voe('x11-mini', 'X11 Mini', {
     categoria: 'autopropelido',
     classificacao: 'autopropelido',
-    foto: 'assets/img/models/voe-x11-mini-cor-vermelho.webp',
-    alt: 'Scooter elétrica Voe X11 Mini vermelha e preta de pneus largos, recorte sem fundo',
+    foto: 'assets/img/models/voe-x11-mini-cor-preto.webp',
+    alt: 'Scooter elétrica Voe X11 Mini preta com banco caramelo e pneus largos, recorte sem fundo',
     specs: {
       ...VOE_AUTO,
       potencia: { valor: 1000, unidade: 'W' },
@@ -621,19 +709,19 @@ window.URBANA_MODELOS = [
       'Carregador bivolt', 'Tecnologia NFC', 'Painel, faróis e setas em LED',
       'Quadro em aço de carbono', 'Bateria removível',
     ],
-    /* Vermelha primeiro: era a cor da foto principal e continua sendo. O que
+    /* Preta primeiro: é a capa, a pedido da loja, e o modal abre nela. O que
        muda de cor são os para-lamas, e o hex de azul e grafite foi amostrado
        neles: o COR.azul é ciano claro, e o grafite desta pintura é mais quente
        e mais claro que o do X11. Grafite entrou no lugar do cinza. */
     cores: [
+      { ...COR.preto, galeria: [
+        { src: 'assets/img/models/voe-x11-mini-cor-preto.webp', alt: 'Voe X11 Mini preta com banco caramelo, em três quartos frontal' },
+      ] },
       { ...COR.vermelho, galeria: [
         { src: 'assets/img/models/voe-x11-mini-cor-vermelho.webp', alt: 'Voe X11 Mini com para-lamas vermelhos e banco preto, em três quartos frontal' },
       ] },
       { ...COR.branco, galeria: [
         { src: 'assets/img/models/voe-x11-mini-cor-branco.webp', alt: 'Voe X11 Mini com para-lamas brancos e banco caramelo, em três quartos frontal' },
-      ] },
-      { ...COR.preto, galeria: [
-        { src: 'assets/img/models/voe-x11-mini-cor-preto.webp', alt: 'Voe X11 Mini preta com banco preto, em três quartos frontal' },
       ] },
       { ...COR.grafite, hex: '#6C6162', galeria: [
         { src: 'assets/img/models/voe-x11-mini-cor-grafite.webp', alt: 'Voe X11 Mini com para-lamas grafite e banco caramelo, em três quartos frontal' },
