@@ -1767,6 +1767,81 @@ input[type="range"]::-moz-range-thumb {
 }
 @media (max-width: 900px) { .testride { grid-template-columns: 1fr; } }
 
+/* ── clientes (letreiro) ───────────────────────────────────────────────── */
+
+/* Sem JS ou com movimento reduzido, é uma fileira que rola com o dedo. O JS
+   duplica os itens e liga `is-pronto`: só então a fileira anda sozinha.
+   Animar sem a cópia faria o fim da lista dar um salto de volta ao começo. */
+.letreiro {
+  --letreiro-largura: 350px;
+  --letreiro-gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.letreiro::-webkit-scrollbar { display: none; }
+
+.letreiro__trilho {
+  display: flex;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* O espaço entre fotos é margem do item, e não `gap` do flex: assim as duas
+   metades do trilho têm exatamente a mesma largura e o -50% emenda sem pulo. */
+.letreiro__item {
+  flex: none;
+  width: var(--letreiro-largura);
+  margin-right: var(--letreiro-gap);
+  scroll-snap-align: start;
+}
+.letreiro__item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 600 / 984;
+  object-fit: cover;
+  border-radius: var(--urb-r-card);
+  background: var(--urb-nevoa);
+}
+
+.letreiro.is-pronto {
+  overflow: hidden;
+  scroll-snap-type: none;
+  /* Esmaece as pontas para transparente: dá a sensação de fileira sem fim e
+     funciona sobre qualquer fundo, sem depender da cor da seção. */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+}
+.letreiro.is-pronto .letreiro__trilho {
+  animation: urb-letreiro var(--letreiro-duracao, 90s) linear infinite;
+}
+/* Parado fora da tela (economiza bateria) e sob o mouse, para dar tempo de
+   olhar a foto. Só em aparelho com hover: no toque, o hover "gruda". */
+.letreiro.is-parado .letreiro__trilho { animation-play-state: paused; }
+@media (hover: hover) {
+  .letreiro.is-pronto:hover .letreiro__trilho { animation-play-state: paused; }
+}
+
+@keyframes urb-letreiro {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Celular: 1,6 foto por vez, na proporção da imagem. A fração que sobra na
+   ponta é o que avisa que a fileira continua. */
+@media (max-width: 760px) {
+  .letreiro {
+    --letreiro-gap: 12px;
+    --letreiro-largura: calc((100vw - var(--letreiro-gap)) / 1.6);
+  }
+  .letreiro.is-pronto {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+  }
+}
+
 /* ── depoimentos ───────────────────────────────────────────────────────── */
 
 .depoimentos__grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--urb-24); }

@@ -1233,6 +1233,41 @@
     obs.observe(frame);
   }
 
+  /* ── 15. Letreiro de clientes ─────────────────────────────────────────── */
+
+  function letreiro() {
+    const raiz = $('[data-letreiro]');
+    if (!raiz) return;
+
+    // Movimento reduzido: fica a fileira que rola com o dedo, sem cópia nem animação.
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const trilho = $('.letreiro__trilho', raiz);
+
+    // A cópia emenda o fim no começo. Para leitor de tela ela não existe.
+    [...trilho.children].forEach((item) => {
+      const copia = item.cloneNode(true);
+      copia.setAttribute('aria-hidden', 'true');
+      $$('img', copia).forEach((img) => { img.alt = ''; });
+      trilho.appendChild(copia);
+    });
+
+    /* Velocidade em px por segundo, e não duração fixa: com duração fixa, a
+       fileira do celular (fotos menores) andaria mais devagar que a do desktop. */
+    const PX_POR_SEGUNDO = 40;
+    const medir = () => {
+      trilho.style.setProperty('--letreiro-duracao', `${trilho.offsetWidth / 2 / PX_POR_SEGUNDO}s`);
+    };
+    medir();
+    new ResizeObserver(medir).observe(raiz);
+
+    raiz.classList.add('is-pronto');
+
+    new IntersectionObserver(([entrada]) => {
+      raiz.classList.toggle('is-parado', !entrada.isIntersecting);
+    }).observe(raiz);
+  }
+
   /* ── partida ──────────────────────────────────────────────────────────── */
 
   function iniciar() {
@@ -1248,6 +1283,7 @@
     formulario();
     midia();
     mapa();
+    letreiro();
 
     /* motion.js roda antes daqui (é `defer`, e este init espera o DOMContentLoaded),
        então tudo que foi injetado agora ainda não tem tween. Sem esta chamada, o
